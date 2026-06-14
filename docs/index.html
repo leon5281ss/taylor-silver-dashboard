@@ -25,6 +25,7 @@
           <p class="panel-label">目前燈號</p>
           <div class="signal-title" id="signalTitle">讀取中</div>
           <p class="signal-message" id="signalMessage">正在讀取白銀監控資料。</p>
+          <div class="signal-numbers" id="signalNumbers"></div>
         </div>
         <div class="signal-meta">
           <span id="currentTarget">--</span>
@@ -33,21 +34,31 @@
         </div>
       </section>
 
-      <section class="source-strip" id="sourceStrip" aria-label="資料狀態"></section>
-
       <section class="comparison-grid" id="comparisonGrid" aria-label="白銀三標的對照"></section>
 
-      <section class="grid metrics-grid" id="metricsGrid" aria-label="核心監控卡片"></section>
+      <section class="source-strip" id="sourceStrip" aria-label="資料狀態"></section>
+
+      <section class="tech-dashboard">
+        <section class="grid metrics-grid" id="metricsGrid" aria-label="核心監控卡片"></section>
+        <section class="condition-panel">
+          <div class="panel-head">
+            <h2>條件檢查</h2>
+            <span class="muted">先看條件，再看圖表</span>
+          </div>
+          <div id="conditionChecklist" class="condition-list"></div>
+        </section>
+      </section>
 
       <section class="content-grid">
         <section class="panel">
           <div class="panel-head">
-            <h2>技術圖表</h2>
-            <span class="muted">K 線、成交量、KD、MACD 與歷史燈號</span>
+            <h2>小型技術圖表</h2>
+            <span class="muted">最近 60 日，圖表僅輔助判斷</span>
           </div>
+          <div class="chart-value-row" id="chartValueRow"></div>
           <div class="chart-stack">
-            <canvas id="priceCanvas" height="210"></canvas>
-            <canvas id="indicatorCanvas" height="190"></canvas>
+            <canvas id="priceCanvas" height="220"></canvas>
+            <canvas id="indicatorCanvas" height="180"></canvas>
           </div>
         </section>
 
@@ -100,6 +111,7 @@
             <h2>TradingView 參考圖</h2>
             <span class="muted">僅供看盤，不從 iframe 擷取資料</span>
           </div>
+          <button class="tv-toggle" id="tvToggle" type="button">展開 TradingView 參考圖</button>
           <div class="tradingview-widget-container">
             <div id="tradingview_chart"></div>
           </div>

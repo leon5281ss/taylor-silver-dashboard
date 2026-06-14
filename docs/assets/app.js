@@ -26,6 +26,7 @@ let appState = {
   data: fallbackData,
   selectedSymbol: "00738U",
   expandedSymbol: "00738U",
+  tvExpanded: false,
   settings: loadSettings()
 };
 
@@ -240,6 +241,45 @@ function volumeNote(latest) {
   return "量能中性";
 }
 
+function trendClass(value) {
+  if (!Number.isFinite(Number(value))) return "";
+  return Number(value) >= 0 ? "up" : "down";
+}
+
+function getRecentHist(rows) {
+  return rows.map((row) => Number(row.macdHistogram)).filter(Number.isFinite).slice(-3);
+}
+
+function conditionChecks(latest, rows, settings) {
+  const hist = getRecentHist(rows);
+  const greenShrinking = detectMacdGreenShrinking(hist);
+  const redShrinking = detectMacdRedShrinking(hist);
+  const stopLossRatio = Number(settings.stopLossRatio || 10) / 100;
+  const averageCost = Number(settings.averageCost || 0);
+  const stopTriggered = Boolean(settings.isHolding && averageCost > 0 && latest && Number(latest.close) <= averageCost * (1 - stopLossRatio));
+  return [
+    ["K < 20", Number(latest?.k) < 20, `K = ${formatNumber(latest?.k)}`],
+    ["K > 80", Number(latest?.k) > 80, `K = ${formatNumber(latest?.k)}`],
+    ["MACD 為綠柱", Number(latest?.macdHistogram) < 0, `Hist = ${formatNumber(latest?.macdHistogram, 4)}`],
+    ["MACD 綠柱縮短", greenShrinking, hist.map((value) => formatNumber(value, 4)).join(" → ") || "資料不足"],
+    ["MACD 紅柱縮短", redShrinking, hist.map((value) => formatNumber(value, 4)).join(" → ") || "資料不足"],
+    ["成交量放大", Number(latest?.volumeRatio20) > 1.5, `Vol/20D = ${formatNumber(latest?.volumeRatio20, 2)}x`],
+    ["停損觸發", stopTriggered, settings.isHolding ? `停損線 ${formatNumber(averageCost * (1 - stopLossRatio))}` : "未設定持倉"]
+  ];
+}
+
+function statusBadges(latest, rows) {
+  const hist = getRecentHist(rows);
+  const badges = [];
+  if (Number(latest?.k) < 20) badges.push(["超賣", "green"]);
+  if (Number(latest?.k) > 80) badges.push(["過熱", "red"]);
+  if (detectMacdGreenShrinking(hist)) badges.push(["跌勢減弱", "green"]);
+  if (detectMacdRedShrinking(hist)) badges.push(["漲勢減弱", "red"]);
+  if (Number(latest?.volumeRatio20) < 0.8) badges.push(["量能不足", "gray"]);
+  if (Number(latest?.volumeRatio20) > 1.5) badges.push(["量能放大", "blue"]);
+  return badges;
+}
+
 function renderSourceStrip() {
   const items = [
     ["資料狀態", dataStatusText(appState.data.dataStatus)],
@@ -264,7 +304,7 @@ function renderComparisonCards() {
     const recentHist = (asset.recentMacdHistogram || asset.prices.slice(-3).map((row) => row.macdHistogram)).map((value) => formatNumber(value, 4)).join(" → ");
     const sourceStatus = asset.sourceStatus || appState.data.sourceStatus?.[symbol] || "資料狀態不明";
     const sourceLabel = asset.sourceLabel || appState.data.sourceLabel?.[symbol] || asset.source || "資料來源不明";
-    const tvNote = symbol === "00738U" ? "若 TWSE:00738U 無法顯示，圖表參考白銀現貨 / SLV。" : "TradingView 僅作參考圖。";
+    const checks = conditionChecks(latest, asset.prices, settings);
     return `
       <article class="compare-card ${signal.type} ${expanded ? "expanded" : ""}" data-symbol="${symbol}">
         <button class="compare-button" type="button" data-symbol="${symbol}" aria-expanded="${expanded}">
@@ -277,12 +317,18 @@ function renderComparisonCards() {
         </button>
         <div class="card-quick">
           <div><span>收盤價</span><strong>${formatNumber(latest?.close)}</strong></div>
-          <div><span>漲跌幅</span><strong>${formatPercent(latest?.changePercent)}</strong></div>
+          <div><span>漲跌幅</span><strong class="${trendClass(latest?.changePercent)}">${formatPercent(latest?.changePercent)}</strong></div>
           <div><span>K 值</span><strong>${formatNumber(latest?.k)}</strong></div>
           <div><span>MACD</span><strong>${formatNumber(latest?.macdHistogram, 4)}</strong></div>
+          <div><span>Vol / 20D</span><strong>${formatNumber(latest?.volumeRatio20, 2)}x</strong></div>
+          <div><span>量能</span><strong>${volumeNote(latest)}</strong></div>
         </div>
         <p class="card-action">${signal.action}</p>
         <div class="card-expanded">
+          <div class="mini-checklist">
+            ${checks.map(([label, passed, detail]) => `<div class="${passed ? "pass" : "fail"}"><strong>${passed ? "是" : "否"}</strong><span>${label}</span><em>${detail}</em></div>`).join("")}
+          </div>
+          <canvas class="mini-chart" id="mini-${symbol}" height="68"></canvas>
           <dl>
             <div><dt>最後收盤日期</dt><dd>${asset.lastCloseDate || latest?.date || "資料不足"}</dd></div>
             <div><dt>D / J</dt><dd>${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}</dd></div>
@@ -292,26 +338,23 @@ function renderComparisonCards() {
             <div><dt>資料狀態</dt><dd>${dataStatusText(appState.data.dataStatus)}；${sourceLabel}</dd></div>
             <div><dt>來源狀態</dt><dd>${sourceStatus}</dd></div>
             <div><dt>新聞摘要</dt><dd>${(appState.data.news || []).slice(0, 2).map((item) => item.title).join(" / ") || "暫無新聞"}</dd></div>
-            <div><dt>圖表</dt><dd>${tvNote}</dd></div>
+            <div><dt>圖表</dt><dd><button class="inline-tv-button" type="button" data-tv-symbol="${symbol}">展開 TradingView 參考圖</button></dd></div>
           </dl>
         </div>
       </article>
     `;
   }).join("");
+  drawMiniCharts();
 }
 
 function renderMetrics(asset, latest, signal, pnl) {
   const cards = [
-    ["最新價格", formatNumber(latest?.close), asset.currency || ""],
-    ["今日漲跌幅", formatPercent(latest?.changePercent), latest?.date || ""],
-    ["K / D / J", `${formatNumber(latest?.k)} / ${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}`, "日線 9,3,3"],
+    ["收盤價", formatNumber(latest?.close), `${asset.currency || ""} / ${latest?.date || ""}`],
+    ["漲跌幅", formatPercent(latest?.changePercent), "紅漲綠跌"],
+    ["K / D / J", `${formatNumber(latest?.k)} / ${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}`, "K < 20 超賣，K > 80 過熱"],
     ["MACD histogram", formatNumber(latest?.macdHistogram, 4), "histogram = macdLine - signalLine"],
     ["MACD 最近三日", asset.prices.slice(-3).map((row) => formatNumber(row.macdHistogram, 4)).join(" → "), "柱狀圖方向"],
-    ["成交量 / 5 日均量", `${formatNumber(latest?.volumeRatio5, 2)}x`, formatNumber(latest?.volume, 0)],
     ["成交量 / 20 日均量", `${formatNumber(latest?.volumeRatio20, 2)}x`, volumeNote(latest)],
-    ["是否持有", appState.settings.isHolding ? "是" : "否", ""],
-    ["平均成本", formatNumber(Number(appState.settings.averageCost || 0)), ""],
-    ["帳面損益 %", pnl.pnlPercent === null ? "未持有" : formatPercent(pnl.pnlPercent), pnl.pnlAmount === null ? "" : `損益 ${formatNumber(pnl.pnlAmount)}`],
     ["建議動作", signal.action, "需人工確認"],
     ["資料狀態", dataStatusText(appState.data.dataStatus), `${asset.sourceLabel || asset.source || "資料來源不明"}；${asset.dataDelay ? "資料延遲" : "即時或近即時"}`]
   ];
@@ -320,10 +363,44 @@ function renderMetrics(asset, latest, signal, pnl) {
     .join("");
 }
 
+function renderConditionChecklist(asset, latest) {
+  const checks = conditionChecks(latest, asset.prices, appState.settings);
+  document.getElementById("conditionChecklist").innerHTML = checks
+    .map(([label, passed, detail]) => `
+      <div class="condition-row ${passed ? "pass" : "fail"}">
+        <strong>${passed ? "是" : "否"}</strong>
+        <span>${label}</span>
+        <em>${detail}</em>
+      </div>
+    `)
+    .join("");
+}
+
+function renderChartValueRow(asset, latest) {
+  const badges = statusBadges(latest, asset.prices);
+  const values = [
+    ["Close", formatNumber(latest?.close)],
+    ["Change", formatPercent(latest?.changePercent)],
+    ["K", formatNumber(latest?.k)],
+    ["D", formatNumber(latest?.d)],
+    ["J", formatNumber(latest?.j)],
+    ["MACD Hist", formatNumber(latest?.macdHistogram, 4)],
+    ["Vol / 20D", `${formatNumber(latest?.volumeRatio20, 2)}x`]
+  ];
+  document.getElementById("chartValueRow").innerHTML = `
+    <div class="chart-values">${values.map(([label, value]) => `<span><b>${label}</b>${value}</span>`).join("")}</div>
+    <div class="status-badges">${badges.map(([label, type]) => `<span class="${type}">${label}</span>`).join("") || "<span class=\"gray\">無特殊狀態</span>"}</div>
+  `;
+}
+
 function resizeCanvas(canvas) {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth;
-  const height = Number(canvas.getAttribute("height"));
+  let height = Number(canvas.getAttribute("height"));
+  if (window.innerWidth <= 720) {
+    if (canvas.id === "priceCanvas") height = 160;
+    if (canvas.id === "indicatorCanvas") height = 140;
+  }
   canvas.width = width * ratio;
   canvas.height = height * ratio;
   const ctx = canvas.getContext("2d");
@@ -334,14 +411,15 @@ function resizeCanvas(canvas) {
 function drawPriceChart(asset) {
   const canvas = document.getElementById("priceCanvas");
   const { ctx, width, height } = resizeCanvas(canvas);
-  const rows = asset.prices.slice(-90);
+  const rows = asset.prices.slice(-60);
   ctx.clearRect(0, 0, width, height);
   if (!rows.length) return;
-  const pad = 28;
+  const pad = 30;
   const max = Math.max(...rows.map((row) => Number(row.high)));
   const min = Math.min(...rows.map((row) => Number(row.low)));
-  const xStep = (width - pad * 2) / Math.max(rows.length - 1, 1);
+  const xStep = (width - pad * 2 - 48) / Math.max(rows.length - 1, 1);
   const y = (value) => height - pad - ((Number(value) - min) / (max - min || 1)) * (height - pad * 2);
+  const latest = rows.at(-1);
   ctx.strokeStyle = "#2563eb";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -353,23 +431,36 @@ function drawPriceChart(asset) {
   rows.forEach((row, index) => {
     const x = pad + index * xStep;
     const up = Number(row.close) >= Number(row.open);
-    ctx.strokeStyle = up ? "#168a4a" : "#c63838";
-    ctx.fillStyle = up ? "#168a4a" : "#c63838";
+    ctx.strokeStyle = up ? "#c63838" : "#168a4a";
+    ctx.fillStyle = up ? "#c63838" : "#168a4a";
     ctx.beginPath();
     ctx.moveTo(x, y(row.low));
     ctx.lineTo(x, y(row.high));
     ctx.stroke();
     ctx.fillRect(x - 3, Math.min(y(row.open), y(row.close)), 6, Math.max(2, Math.abs(y(row.open) - y(row.close))));
   });
+  const latestY = y(latest.close);
+  ctx.strokeStyle = "#20242c";
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(pad, latestY);
+  ctx.lineTo(width - pad, latestY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = "#20242c";
+  ctx.fillRect(width - pad - 44, latestY - 11, 44, 22);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "11px ui-monospace, monospace";
+  ctx.fillText(formatNumber(latest.close), width - pad - 40, latestY + 4);
   ctx.fillStyle = "#667085";
   ctx.font = "12px sans-serif";
-  ctx.fillText(`${asset.name || asset.symbol} close ${formatNumber(rows.at(-1).close)}`, pad, 16);
+  ctx.fillText(`High ${formatNumber(max)}  Low ${formatNumber(min)}`, pad, 16);
 }
 
 function drawIndicatorChart(asset) {
   const canvas = document.getElementById("indicatorCanvas");
   const { ctx, width, height } = resizeCanvas(canvas);
-  const rows = asset.prices.slice(-90);
+  const rows = asset.prices.slice(-60);
   ctx.clearRect(0, 0, width, height);
   if (!rows.length) return;
   const pad = 28;
@@ -378,6 +469,8 @@ function drawIndicatorChart(asset) {
   const histValues = rows.map((row) => Number(row.macdHistogram));
   const histMax = Math.max(...histValues.map((value) => Math.abs(value)), 1);
   const histBase = height - 44;
+  const latest = rows.at(-1);
+  const histArrow = getRecentHist(rows).map((value) => formatNumber(value, 4)).join(" → ");
 
   ctx.strokeStyle = "#d9dee8";
   ctx.beginPath();
@@ -386,6 +479,10 @@ function drawIndicatorChart(asset) {
   ctx.moveTo(pad, kdY(20));
   ctx.lineTo(width - pad, kdY(20));
   ctx.stroke();
+  ctx.fillStyle = "#667085";
+  ctx.font = "11px sans-serif";
+  ctx.fillText("80 過熱", pad + 4, kdY(80) - 4);
+  ctx.fillText("20 超賣", pad + 4, kdY(20) - 4);
 
   [["#2563eb", "k"], ["#b7791f", "d"], ["#667085", "j"]].forEach(([color, key]) => {
     ctx.strokeStyle = color;
@@ -406,7 +503,48 @@ function drawIndicatorChart(asset) {
   });
   ctx.fillStyle = "#667085";
   ctx.font = "12px sans-serif";
-  ctx.fillText("KD + MACD histogram", pad, 16);
+  ctx.fillText("K", pad, 16);
+  ctx.fillStyle = "#b7791f";
+  ctx.fillText("D", pad + 24, 16);
+  ctx.fillStyle = "#667085";
+  ctx.fillText("J", pad + 48, 16);
+  ctx.fillStyle = "#20242c";
+  ctx.textAlign = "right";
+  ctx.fillText(`K ${formatNumber(latest.k)} / D ${formatNumber(latest.d)} / J ${formatNumber(latest.j)}`, width - pad, 16);
+  ctx.fillText(`Hist ${formatNumber(latest.macdHistogram, 4)}`, width - pad, histBase - 52);
+  ctx.fillText(histArrow, width - pad, histBase + 18);
+  ctx.textAlign = "left";
+}
+
+function drawMiniCharts() {
+  SYMBOLS.forEach((symbol) => {
+    const canvas = document.getElementById(`mini-${symbol}`);
+    if (!canvas) return;
+    const asset = getAsset(symbol);
+    const rows = asset.prices.slice(-30);
+    const ratio = window.devicePixelRatio || 1;
+    const width = canvas.clientWidth;
+    const height = 68;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(ratio, ratio);
+    ctx.clearRect(0, 0, width, height);
+    if (!rows.length) return;
+    const max = Math.max(...rows.map((row) => Number(row.close)));
+    const min = Math.min(...rows.map((row) => Number(row.close)));
+    const xStep = width / Math.max(rows.length - 1, 1);
+    const y = (value) => height - 8 - ((Number(value) - min) / (max - min || 1)) * (height - 16);
+    const up = Number(rows.at(-1).close) >= Number(rows[0].close);
+    ctx.strokeStyle = up ? "#c63838" : "#168a4a";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    rows.forEach((row, index) => {
+      const x = index * xStep;
+      index === 0 ? ctx.moveTo(x, y(row.close)) : ctx.lineTo(x, y(row.close));
+    });
+    ctx.stroke();
+  });
 }
 
 function renderNews(news) {
@@ -435,6 +573,12 @@ function renderTradingView(symbol) {
   const fallback = symbol === "00738U" ? "OANDA:XAGUSD" : map[symbol];
   const container = document.getElementById("tradingview_chart");
   container.innerHTML = "";
+  const isMobile = window.innerWidth <= 720;
+  if (isMobile && !appState.tvExpanded) {
+    container.classList.add("collapsed");
+    return;
+  }
+  container.classList.remove("collapsed");
   const note = document.createElement("p");
   note.className = "chart-note";
   note.textContent = symbol === "00738U" ? "00738U 若無法顯示，請切換白銀現貨 / SLV 作為參考圖；燈號仍由本系統資料計算。" : "TradingView 僅供看盤參考，燈號由本系統資料計算。";
@@ -445,7 +589,7 @@ function renderTradingView(symbol) {
   }
   const widgetBox = document.createElement("div");
   widgetBox.id = "tv_widget_inner";
-  widgetBox.style.height = "430px";
+  widgetBox.style.height = isMobile ? "320px" : "360px";
   container.appendChild(widgetBox);
   new window.TradingView.widget({
     autosize: true,
@@ -471,12 +615,20 @@ function renderDashboard() {
   signalPanel.className = `signal-panel ${signal.type}`;
   document.getElementById("signalTitle").textContent = signal.label;
   document.getElementById("signalMessage").textContent = signal.message;
+  document.getElementById("signalNumbers").innerHTML = `
+    <span><b>Close</b>${formatNumber(latest?.close)}</span>
+    <span class="${trendClass(latest?.changePercent)}"><b>Change</b>${formatPercent(latest?.changePercent)}</span>
+    <span><b>K</b>${formatNumber(latest?.k)}</span>
+    <span><b>MACD</b>${formatNumber(latest?.macdHistogram, 4)}</span>
+  `;
   document.getElementById("currentTarget").textContent = `${asset.symbol === "XAGUSD" ? "XAG/USD" : asset.symbol} ${asset.name || ""}`;
   document.getElementById("updatedAt").textContent = `更新 ${appState.data.updatedAt || latest?.date || "--"}；收盤 ${asset.lastCloseDate || latest?.date || "--"}`;
   document.getElementById("dataDelayBadge").textContent = `${dataStatusText(appState.data.dataStatus)} / ${asset.dataDelay ? "資料延遲" : "即時或近即時"}`;
   renderSourceStrip();
   renderComparisonCards();
   renderMetrics(asset, latest, signal, pnl);
+  renderConditionChecklist(asset, latest);
+  renderChartValueRow(asset, latest);
   drawPriceChart(asset);
   drawIndicatorChart(asset);
   renderNews(appState.data.news);
@@ -540,6 +692,15 @@ async function init() {
     });
   });
   document.getElementById("comparisonGrid").addEventListener("click", (event) => {
+    const tvButton = event.target.closest(".inline-tv-button");
+    if (tvButton) {
+      appState.selectedSymbol = tvButton.dataset.tvSymbol;
+      appState.tvExpanded = true;
+      updateTabs();
+      renderDashboard();
+      document.getElementById("tradingview_chart").scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     const button = event.target.closest(".compare-button");
     if (!button) return;
     appState.selectedSymbol = button.dataset.symbol;
@@ -548,6 +709,11 @@ async function init() {
     saveSettings(appState.settings);
     updateTabs();
     renderDashboard();
+  });
+  document.getElementById("tvToggle").addEventListener("click", () => {
+    appState.tvExpanded = !appState.tvExpanded;
+    document.getElementById("tvToggle").textContent = appState.tvExpanded ? "收合 TradingView 參考圖" : "展開 TradingView 參考圖";
+    renderTradingView(appState.selectedSymbol);
   });
   updateTabs();
   renderDashboard();

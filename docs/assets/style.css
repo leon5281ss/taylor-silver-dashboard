@@ -1,5 +1,5 @@
 :root {
-  --bg: #f6f7f9;
+  --bg: #f3f5f8;
   --panel: #ffffff;
   --ink: #20242c;
   --muted: #667085;
@@ -7,10 +7,10 @@
   --green: #168a4a;
   --yellow: #b7791f;
   --red: #c63838;
-  --orange: #b45309;
-  --gray: #667085;
+  --orange: #8a1f1f;
+  --gray: #6b6478;
   --blue: #2563eb;
-  --shadow: 0 12px 32px rgba(16, 24, 40, 0.08);
+  --shadow: 0 10px 24px rgba(16, 24, 40, 0.07);
 }
 
 * {
@@ -23,6 +23,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: "Microsoft JhengHei", "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
 }
 
 .topbar {
@@ -97,7 +98,7 @@ button:hover {
 .disclaimer {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 14px;
   box-shadow: var(--shadow);
 }
 
@@ -137,6 +138,12 @@ button:hover {
 .compare-card {
   overflow: hidden;
   border-top: 6px solid var(--gray);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.compare-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(16, 24, 40, 0.1);
 }
 
 .compare-card.ready {
@@ -161,7 +168,7 @@ button:hover {
   align-items: start;
   gap: 12px;
   width: 100%;
-  padding: 16px;
+  padding: 16px 16px 12px;
   border: 0;
   border-radius: 0;
   text-align: left;
@@ -170,7 +177,7 @@ button:hover {
 
 .compare-button h2 {
   margin-top: 4px;
-  font-size: 24px;
+  font-size: 26px;
 }
 
 .compare-button p {
@@ -180,14 +187,14 @@ button:hover {
 }
 
 .compare-button strong {
-  min-width: 112px;
+  min-width: 120px;
   text-align: right;
   font-size: 16px;
 }
 
 .card-quick {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: var(--line);
   border-top: 1px solid var(--line);
@@ -210,11 +217,14 @@ button:hover {
   display: block;
   margin-top: 4px;
   font-size: 20px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 .card-action {
   padding: 14px 16px;
   line-height: 1.45;
+  font-weight: 700;
+  background: #fafbfc;
 }
 
 .card-expanded {
@@ -226,13 +236,71 @@ button:hover {
   display: block;
 }
 
+.mini-checklist {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.mini-checklist div,
+.condition-row {
+  display: grid;
+  grid-template-columns: 42px minmax(100px, 1fr) 1.2fr;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.mini-checklist strong,
+.condition-row strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 34px;
+  height: 28px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.mini-checklist .pass strong,
+.condition-row.pass strong {
+  background: var(--green);
+}
+
+.mini-checklist .fail strong,
+.condition-row.fail strong {
+  background: var(--gray);
+}
+
+.mini-checklist span,
+.condition-row span {
+  font-weight: 800;
+}
+
+.mini-checklist em,
+.condition-row em {
+  color: var(--muted);
+  font-style: normal;
+  font-size: 13px;
+}
+
+.mini-chart {
+  width: 100%;
+  height: 68px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+}
+
 .card-expanded dl {
   display: grid;
   gap: 8px;
   margin: 0;
 }
 
-.card-expanded div {
+.card-expanded dl > div {
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 10px;
@@ -289,6 +357,43 @@ button:hover {
   font-weight: 900;
 }
 
+.signal-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.signal-numbers span,
+.chart-values span {
+  display: grid;
+  gap: 2px;
+  min-width: 104px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.signal-numbers b,
+.chart-values b {
+  color: var(--muted);
+  font-family: "Microsoft JhengHei", "Segoe UI", system-ui, sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.up {
+  color: var(--red);
+}
+
+.down {
+  color: var(--green);
+}
+
 .signal-message {
   max-width: 900px;
   margin-top: 10px;
@@ -316,18 +421,24 @@ button:hover {
   font-weight: 800;
 }
 
+.tech-dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+  gap: 18px;
+}
+
 .grid {
   display: grid;
   gap: 12px;
 }
 
 .metrics-grid {
-  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
 }
 
 .metric-card {
   padding: 14px;
-  min-height: 96px;
+  min-height: 90px;
 }
 
 .metric-card span {
@@ -340,6 +451,7 @@ button:hover {
 .metric-card strong {
   display: block;
   margin-top: 10px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   font-size: 22px;
 }
 
@@ -351,7 +463,7 @@ button:hover {
 
 .content-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.8fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
   gap: 18px;
 }
 
@@ -370,14 +482,69 @@ button:hover {
 
 .chart-stack {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 canvas {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
   background: #ffffff;
+}
+
+.chart-value-row {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.chart-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.status-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.status-badges span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.status-badges .green {
+  background: var(--green);
+}
+
+.status-badges .red {
+  background: var(--red);
+}
+
+.status-badges .gray {
+  background: var(--gray);
+}
+
+.status-badges .blue {
+  background: var(--blue);
+}
+
+.condition-panel {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.condition-list {
+  display: grid;
+  gap: 8px;
 }
 
 .settings-form {
@@ -397,7 +564,7 @@ input,
 select {
   width: 100%;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 10px 11px;
   color: var(--ink);
   font: inherit;
@@ -423,7 +590,27 @@ form button {
 
 .tradingview-widget-container,
 #tradingview_chart {
-  min-height: 460px;
+  min-height: 0;
+}
+
+#tradingview_chart.collapsed {
+  display: none;
+}
+
+.tv-toggle,
+.inline-tv-button {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.inline-tv-button {
+  width: auto;
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 13px;
 }
 
 .chart-note {
@@ -442,7 +629,7 @@ form button {
 .news-summary div {
   padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .news-summary strong {
@@ -463,7 +650,7 @@ form button {
 .news-item {
   padding: 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .news-item strong {
@@ -493,7 +680,8 @@ form button {
 
 @media (max-width: 1100px) {
   .source-strip,
-  .comparison-grid {
+  .comparison-grid,
+  .tech-dashboard {
     grid-template-columns: 1fr;
   }
 
@@ -522,7 +710,7 @@ form button {
   }
 
   .metrics-grid {
-    grid-template-columns: repeat(2, minmax(130px, 1fr));
+    grid-template-columns: 1fr 1fr;
   }
 
   .compare-button {
@@ -538,7 +726,53 @@ form button {
     grid-template-columns: 1fr 1fr;
   }
 
-  .card-expanded div {
+  .comparison-grid {
+    gap: 18px;
+  }
+
+  .source-strip,
+  .tech-dashboard,
+  .content-grid {
+    margin-top: 2px;
+  }
+
+  .source-strip {
+    order: 4;
+  }
+
+  .tech-dashboard {
+    order: 5;
+  }
+
+  .content-grid {
+    order: 6;
+  }
+
+  .signal-title {
+    font-size: 34px;
+  }
+
+  .signal-message {
+    font-size: 16px;
+  }
+
+  .signal-numbers span,
+  .chart-values span {
+    min-width: calc(50% - 6px);
+    font-size: 16px;
+  }
+
+  .mini-checklist div,
+  .condition-row {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .mini-checklist em,
+  .condition-row em {
+    grid-column: 2;
+  }
+
+  .card-expanded dl > div {
     grid-template-columns: 1fr;
     gap: 4px;
   }
