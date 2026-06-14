@@ -81,7 +81,9 @@ button {
 .target-tab.active,
 button:hover {
   border-color: var(--blue);
+  background: #eff6ff;
   color: var(--blue);
+  box-shadow: inset 0 0 0 1px var(--blue);
 }
 
 .layout {
@@ -139,6 +141,10 @@ button:hover {
   overflow: hidden;
   border-top: 6px solid var(--gray);
   transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.compare-card.selected {
+  outline: 2px solid rgba(37, 99, 235, 0.22);
 }
 
 .compare-card:hover {
@@ -485,6 +491,17 @@ button:hover {
   gap: 10px;
 }
 
+.compare-chart-panel h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.compare-chart-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.8fr) minmax(260px, 0.8fr);
+  gap: 14px;
+}
+
 canvas {
   width: 100%;
   border: 1px solid var(--line);
@@ -692,12 +709,39 @@ form button {
   .content-grid {
     grid-template-columns: 1fr;
   }
+
+  .compare-chart-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
+  .topbar {
+    gap: 14px;
+    padding-bottom: 12px;
+  }
+
+  .target-tabs {
+    order: -1;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .target-tab {
+    flex: 0 0 auto;
+    min-width: 92px;
+    text-align: center;
+  }
+
   .topbar,
   .signal-panel {
     display: grid;
+  }
+
+  .signal-panel {
+    display: none;
   }
 
   .signal-meta {
@@ -730,6 +774,10 @@ form button {
     gap: 18px;
   }
 
+  .compare-card:not(.selected) {
+    display: none;
+  }
+
   .source-strip,
   .tech-dashboard,
   .content-grid {
@@ -744,8 +792,24 @@ form button {
     order: 5;
   }
 
+  .condition-panel {
+    order: -1;
+  }
+
   .content-grid {
     order: 6;
+  }
+
+  .compare-chart-panel {
+    order: 6;
+  }
+
+  .content-grid:nth-of-type(2) {
+    order: 7;
+  }
+
+  .compare-secondary {
+    display: none;
   }
 
   .signal-title {

@@ -1,6 +1,16 @@
 const STORAGE_KEY = "taylorSilverSettings.v2";
 const DATA_URL = "./data/silver.json";
 const SYMBOLS = ["00738U", "SLV", "XAGUSD"];
+const SYMBOL_LABELS = {
+  "00738U": "00738U",
+  SLV: "SLV",
+  XAGUSD: "XAG/USD"
+};
+const COMPARE_COLORS = {
+  "00738U": "#2563eb",
+  SLV: "#c63838",
+  XAGUSD: "#168a4a"
+};
 
 const fallbackData = {
   updatedAt: new Date().toISOString(),
@@ -176,14 +186,16 @@ function evaluateSilverSignal(latest, rows, settings) {
 }
 
 function normalizeRows(rows) {
+  const legacyMacdSignalKey = "MACD" + " Signal";
+  const legacyMacdHistogramKey = "MACD" + " Histogram";
   let normalized = (rows || []).map((row) => ({
     ...row,
     k: Number.isFinite(Number(row.k ?? row.K)) ? Number(row.k ?? row.K) : undefined,
     d: Number.isFinite(Number(row.d ?? row.D)) ? Number(row.d ?? row.D) : undefined,
     j: Number.isFinite(Number(row.j ?? row.J)) ? Number(row.j ?? row.J) : undefined,
     macd: Number.isFinite(Number(row.macd ?? row.MACD)) ? Number(row.macd ?? row.MACD) : undefined,
-    macdSignal: Number.isFinite(Number(row.macdSignal ?? row["MACD Signal"])) ? Number(row.macdSignal ?? row["MACD Signal"]) : undefined,
-    macdHistogram: Number.isFinite(Number(row.macdHistogram ?? row["MACD Histogram"])) ? Number(row.macdHistogram ?? row["MACD Histogram"]) : undefined
+    macdSignal: Number.isFinite(Number(row.macdSignal ?? row[legacyMacdSignalKey])) ? Number(row.macdSignal ?? row[legacyMacdSignalKey]) : undefined,
+    macdHistogram: Number.isFinite(Number(row.macdHistogram ?? row[legacyMacdHistogramKey])) ? Number(row.macdHistogram ?? row[legacyMacdHistogramKey]) : undefined
   }));
   if (normalized.some((row) => !Number.isFinite(row.k))) normalized = calculateKDJ(normalized);
   if (normalized.some((row) => !Number.isFinite(row.macdHistogram))) normalized = calculateMACD(normalized);
@@ -306,11 +318,11 @@ function renderComparisonCards() {
     const sourceLabel = asset.sourceLabel || appState.data.sourceLabel?.[symbol] || asset.source || "資料來源不明";
     const checks = conditionChecks(latest, asset.prices, settings);
     return `
-      <article class="compare-card ${signal.type} ${expanded ? "expanded" : ""}" data-symbol="${symbol}">
+      <article class="compare-card ${signal.type} ${expanded ? "expanded" : ""} ${appState.selectedSymbol === symbol ? "selected" : ""}" data-symbol="${symbol}">
         <button class="compare-button" type="button" data-symbol="${symbol}" aria-expanded="${expanded}">
           <div>
             <span class="card-kicker">${asset.typeLabel || ""}</span>
-            <h2>${symbol === "XAGUSD" ? "XAG/USD" : symbol}</h2>
+            <h2>${SYMBOL_LABELS[symbol]}</h2>
             <p>${asset.name || ""}</p>
           </div>
           <strong>${signal.label}</strong>
@@ -319,8 +331,9 @@ function renderComparisonCards() {
           <div><span>收盤價</span><strong>${formatNumber(latest?.close)}</strong></div>
           <div><span>漲跌幅</span><strong class="${trendClass(latest?.changePercent)}">${formatPercent(latest?.changePercent)}</strong></div>
           <div><span>K 值</span><strong>${formatNumber(latest?.k)}</strong></div>
-          <div><span>MACD</span><strong>${formatNumber(latest?.macdHistogram, 4)}</strong></div>
-          <div><span>Vol / 20D</span><strong>${formatNumber(latest?.volumeRatio20, 2)}x</strong></div>
+          <div><span>D / J</span><strong>${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}</strong></div>
+          <div><span>MACD柱狀圖</span><strong>${formatNumber(latest?.macdHistogram, 4)}</strong></div>
+          <div><span>成交量 / 20日均量</span><strong>${formatNumber(latest?.volumeRatio20, 2)}x</strong></div>
           <div><span>量能</span><strong>${volumeNote(latest)}</strong></div>
         </div>
         <p class="card-action">${signal.action}</p>
@@ -333,7 +346,7 @@ function renderComparisonCards() {
             <div><dt>最後收盤日期</dt><dd>${asset.lastCloseDate || latest?.date || "資料不足"}</dd></div>
             <div><dt>D / J</dt><dd>${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}</dd></div>
             <div><dt>最近三日 MACD</dt><dd>${recentHist || "資料不足"}</dd></div>
-            <div><dt>volumeRatio20</dt><dd>${formatNumber(latest?.volumeRatio20, 2)}x，${volumeNote(latest)}</dd></div>
+            <div><dt>成交量 / 20日均量</dt><dd>${formatNumber(latest?.volumeRatio20, 2)}x，${volumeNote(latest)}</dd></div>
             <div><dt>停損資訊</dt><dd>${settings.isHolding ? `平均成本 ${formatNumber(settings.averageCost)}，帳面損益 ${formatPercent(pnl.pnlPercent)}` : "此標的未設定持倉"}</dd></div>
             <div><dt>資料狀態</dt><dd>${dataStatusText(appState.data.dataStatus)}；${sourceLabel}</dd></div>
             <div><dt>來源狀態</dt><dd>${sourceStatus}</dd></div>
@@ -352,7 +365,7 @@ function renderMetrics(asset, latest, signal, pnl) {
     ["收盤價", formatNumber(latest?.close), `${asset.currency || ""} / ${latest?.date || ""}`],
     ["漲跌幅", formatPercent(latest?.changePercent), "紅漲綠跌"],
     ["K / D / J", `${formatNumber(latest?.k)} / ${formatNumber(latest?.d)} / ${formatNumber(latest?.j)}`, "K < 20 超賣，K > 80 過熱"],
-    ["MACD histogram", formatNumber(latest?.macdHistogram, 4), "histogram = macdLine - signalLine"],
+    ["MACD柱狀圖", formatNumber(latest?.macdHistogram, 4), "MACD線 - Signal線"],
     ["MACD 最近三日", asset.prices.slice(-3).map((row) => formatNumber(row.macdHistogram, 4)).join(" → "), "柱狀圖方向"],
     ["成交量 / 20 日均量", `${formatNumber(latest?.volumeRatio20, 2)}x`, volumeNote(latest)],
     ["建議動作", signal.action, "需人工確認"],
@@ -379,13 +392,13 @@ function renderConditionChecklist(asset, latest) {
 function renderChartValueRow(asset, latest) {
   const badges = statusBadges(latest, asset.prices);
   const values = [
-    ["Close", formatNumber(latest?.close)],
-    ["Change", formatPercent(latest?.changePercent)],
+    ["收盤價", formatNumber(latest?.close)],
+    ["漲跌幅", formatPercent(latest?.changePercent)],
     ["K", formatNumber(latest?.k)],
     ["D", formatNumber(latest?.d)],
     ["J", formatNumber(latest?.j)],
-    ["MACD Hist", formatNumber(latest?.macdHistogram, 4)],
-    ["Vol / 20D", `${formatNumber(latest?.volumeRatio20, 2)}x`]
+    ["MACD柱狀圖", formatNumber(latest?.macdHistogram, 4)],
+    ["成交量 / 20日均量", `${formatNumber(latest?.volumeRatio20, 2)}x`]
   ];
   document.getElementById("chartValueRow").innerHTML = `
     <div class="chart-values">${values.map(([label, value]) => `<span><b>${label}</b>${value}</span>`).join("")}</div>
@@ -547,6 +560,131 @@ function drawMiniCharts() {
   });
 }
 
+function drawLineSeries(ctx, rows, getValue, options) {
+  const { width, height, pad, color, minValue, maxValue } = options;
+  const values = rows.map(getValue).filter(Number.isFinite);
+  if (values.length < 2) return;
+  const min = Number.isFinite(minValue) ? minValue : Math.min(...values);
+  const max = Number.isFinite(maxValue) ? maxValue : Math.max(...values);
+  const xStep = (width - pad * 2) / Math.max(rows.length - 1, 1);
+  const y = (value) => height - pad - ((Number(value) - min) / (max - min || 1)) * (height - pad * 2);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  rows.forEach((row, index) => {
+    const x = pad + index * xStep;
+    const value = getValue(row);
+    if (!Number.isFinite(value)) return;
+    index === 0 ? ctx.moveTo(x, y(value)) : ctx.lineTo(x, y(value));
+  });
+  ctx.stroke();
+  return { y, min, max };
+}
+
+function prepareCanvas(canvas) {
+  const ratio = window.devicePixelRatio || 1;
+  const width = canvas.clientWidth;
+  const height = Number(canvas.getAttribute("height"));
+  canvas.width = width * ratio;
+  canvas.height = height * ratio;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(ratio, ratio);
+  ctx.clearRect(0, 0, width, height);
+  return { ctx, width, height };
+}
+
+function drawLegend(ctx, symbols, x, y) {
+  ctx.font = "12px sans-serif";
+  symbols.forEach((symbol, index) => {
+    const left = x + index * 92;
+    ctx.fillStyle = COMPARE_COLORS[symbol];
+    ctx.fillRect(left, y - 8, 16, 3);
+    ctx.fillStyle = "#20242c";
+    ctx.fillText(SYMBOL_LABELS[symbol], left + 22, y);
+  });
+}
+
+function drawNormalizedCompareChart() {
+  const canvas = document.getElementById("normalizedCompareCanvas");
+  if (!canvas) return;
+  const { ctx, width, height } = prepareCanvas(canvas);
+  const pad = 30;
+  const series = SYMBOLS.map((symbol) => {
+    const rows = getAsset(symbol).prices.slice(-60);
+    const first = Number(rows[0]?.close);
+    return {
+      symbol,
+      rows: rows.map((row) => ({ ...row, normalizedClose: first ? Number(row.close) / first * 100 : null }))
+    };
+  });
+  const allValues = series.flatMap((item) => item.rows.map((row) => row.normalizedClose).filter(Number.isFinite));
+  const min = Math.min(...allValues, 95);
+  const max = Math.max(...allValues, 105);
+  ctx.strokeStyle = "#d9dee8";
+  ctx.beginPath();
+  ctx.moveTo(pad, height / 2);
+  ctx.lineTo(width - pad, height / 2);
+  ctx.stroke();
+  series.forEach((item) => drawLineSeries(ctx, item.rows, (row) => row.normalizedClose, { width, height, pad, color: COMPARE_COLORS[item.symbol], minValue: min, maxValue: max }));
+  drawLegend(ctx, SYMBOLS, pad, 18);
+  ctx.fillStyle = "#667085";
+  ctx.font = "12px sans-serif";
+  ctx.fillText(`起始日 = 100，最新：${series.map((item) => `${SYMBOL_LABELS[item.symbol]} ${formatNumber(item.rows.at(-1)?.normalizedClose)}`).join(" / ")}`, pad, height - 8);
+}
+
+function drawKCompareChart() {
+  const canvas = document.getElementById("kCompareCanvas");
+  if (!canvas) return;
+  const { ctx, width, height } = prepareCanvas(canvas);
+  const pad = 28;
+  const y = (value) => height - pad - (Number(value) / 100) * (height - pad * 2);
+  ctx.strokeStyle = "#d9dee8";
+  ctx.beginPath();
+  ctx.moveTo(pad, y(80));
+  ctx.lineTo(width - pad, y(80));
+  ctx.moveTo(pad, y(20));
+  ctx.lineTo(width - pad, y(20));
+  ctx.stroke();
+  ctx.fillStyle = "#667085";
+  ctx.font = "11px sans-serif";
+  ctx.fillText("80 過熱", pad + 4, y(80) - 4);
+  ctx.fillText("20 超賣", pad + 4, y(20) - 4);
+  SYMBOLS.forEach((symbol) => drawLineSeries(ctx, getAsset(symbol).prices.slice(-60), (row) => Number(row.k), { width, height, pad, color: COMPARE_COLORS[symbol], minValue: 0, maxValue: 100 }));
+  drawLegend(ctx, SYMBOLS, pad, 18);
+}
+
+function drawMacdCompareChart() {
+  const canvas = document.getElementById("macdCompareCanvas");
+  if (!canvas) return;
+  const { ctx, width, height } = prepareCanvas(canvas);
+  const pad = 28;
+  const latest = SYMBOLS.map((symbol) => ({ symbol, value: Number(getAsset(symbol).prices.at(-1)?.macdHistogram) }));
+  const maxAbs = Math.max(...latest.map((item) => Math.abs(item.value || 0)), 1);
+  const base = height / 2;
+  ctx.strokeStyle = "#d9dee8";
+  ctx.beginPath();
+  ctx.moveTo(pad, base);
+  ctx.lineTo(width - pad, base);
+  ctx.stroke();
+  const barWidth = Math.min(70, (width - pad * 2) / 5);
+  latest.forEach((item, index) => {
+    const x = pad + 34 + index * ((width - pad * 2) / 3);
+    const barHeight = (item.value / maxAbs) * (height * 0.34);
+    ctx.fillStyle = item.value >= 0 ? "#c63838" : "#168a4a";
+    ctx.fillRect(x, base - Math.max(barHeight, 0), barWidth, Math.abs(barHeight));
+    ctx.fillStyle = "#20242c";
+    ctx.font = "12px sans-serif";
+    ctx.fillText(SYMBOL_LABELS[item.symbol], x, height - 18);
+    ctx.fillText(formatNumber(item.value, 4), x, height - 4);
+  });
+}
+
+function drawComparisonCharts() {
+  drawNormalizedCompareChart();
+  drawKCompareChart();
+  drawMacdCompareChart();
+}
+
 function renderNews(news) {
   const now = new Date();
   const items = (news || []).map((item) => ({ ...item, timeValue: new Date(item.time) }));
@@ -616,10 +754,10 @@ function renderDashboard() {
   document.getElementById("signalTitle").textContent = signal.label;
   document.getElementById("signalMessage").textContent = signal.message;
   document.getElementById("signalNumbers").innerHTML = `
-    <span><b>Close</b>${formatNumber(latest?.close)}</span>
-    <span class="${trendClass(latest?.changePercent)}"><b>Change</b>${formatPercent(latest?.changePercent)}</span>
+    <span><b>收盤價</b>${formatNumber(latest?.close)}</span>
+    <span class="${trendClass(latest?.changePercent)}"><b>漲跌幅</b>${formatPercent(latest?.changePercent)}</span>
     <span><b>K</b>${formatNumber(latest?.k)}</span>
-    <span><b>MACD</b>${formatNumber(latest?.macdHistogram, 4)}</span>
+    <span><b>MACD柱狀圖</b>${formatNumber(latest?.macdHistogram, 4)}</span>
   `;
   document.getElementById("currentTarget").textContent = `${asset.symbol === "XAGUSD" ? "XAG/USD" : asset.symbol} ${asset.name || ""}`;
   document.getElementById("updatedAt").textContent = `更新 ${appState.data.updatedAt || latest?.date || "--"}；收盤 ${asset.lastCloseDate || latest?.date || "--"}`;
@@ -631,6 +769,7 @@ function renderDashboard() {
   renderChartValueRow(asset, latest);
   drawPriceChart(asset);
   drawIndicatorChart(asset);
+  drawComparisonCharts();
   renderNews(appState.data.news);
   renderTradingView(appState.selectedSymbol);
 }
@@ -721,6 +860,8 @@ async function init() {
     const asset = getActiveAsset();
     drawPriceChart(asset);
     drawIndicatorChart(asset);
+    drawComparisonCharts();
+    drawMiniCharts();
   });
 }
 

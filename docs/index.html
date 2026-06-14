@@ -105,6 +105,27 @@
         </section>
       </section>
 
+      <section class="panel compare-chart-panel">
+        <div class="panel-head">
+          <h2>三標的對比圖</h2>
+          <span class="muted">標準化走勢以近 60 日起始日 = 100 比較強弱</span>
+        </div>
+        <div class="compare-chart-grid">
+          <div>
+            <h3>標準化收盤價走勢</h3>
+            <canvas id="normalizedCompareCanvas" height="210"></canvas>
+          </div>
+          <div class="compare-secondary">
+            <h3>K 值對比</h3>
+            <canvas id="kCompareCanvas" height="170"></canvas>
+          </div>
+          <div class="compare-secondary">
+            <h3>MACD 柱狀圖對比</h3>
+            <canvas id="macdCompareCanvas" height="170"></canvas>
+          </div>
+        </div>
+      </section>
+
       <section class="content-grid">
         <section class="panel">
           <div class="panel-head">
