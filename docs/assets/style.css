@@ -90,13 +90,166 @@ button:hover {
 }
 
 .signal-panel,
+.source-strip,
 .panel,
+.compare-card,
 .metric-card,
 .disclaimer {
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 8px;
   box-shadow: var(--shadow);
+}
+
+.source-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.source-strip div {
+  padding: 12px 14px;
+  background: #ffffff;
+}
+
+.source-strip span,
+.card-kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.source-strip strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.compare-card {
+  overflow: hidden;
+  border-top: 6px solid var(--gray);
+}
+
+.compare-card.ready {
+  border-top-color: var(--green);
+}
+
+.compare-card.hold {
+  border-top-color: var(--yellow);
+}
+
+.compare-card.exit {
+  border-top-color: var(--red);
+}
+
+.compare-card.stop {
+  border-top-color: var(--orange);
+}
+
+.compare-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+  background: #ffffff;
+}
+
+.compare-button h2 {
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+.compare-button p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.compare-button strong {
+  min-width: 112px;
+  text-align: right;
+  font-size: 16px;
+}
+
+.card-quick {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.card-quick div {
+  padding: 12px;
+  background: #ffffff;
+}
+
+.card-quick span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.card-quick strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 20px;
+}
+
+.card-action {
+  padding: 14px 16px;
+  line-height: 1.45;
+}
+
+.card-expanded {
+  display: none;
+  padding: 0 16px 16px;
+}
+
+.compare-card.expanded .card-expanded {
+  display: block;
+}
+
+.card-expanded dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.card-expanded div {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.card-expanded dt {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.card-expanded dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .signal-panel {
@@ -273,6 +426,12 @@ form button {
   min-height: 460px;
 }
 
+.chart-note {
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .news-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -333,6 +492,11 @@ form button {
 }
 
 @media (max-width: 1100px) {
+  .source-strip,
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
   .metrics-grid {
     grid-template-columns: repeat(3, minmax(150px, 1fr));
   }
@@ -359,6 +523,24 @@ form button {
 
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(130px, 1fr));
+  }
+
+  .compare-button {
+    align-items: stretch;
+  }
+
+  .compare-button strong {
+    min-width: 0;
+    text-align: right;
+  }
+
+  .card-quick {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .card-expanded div {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 
   .panel-head {
