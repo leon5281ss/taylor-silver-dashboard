@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Taylor Silver Dashboard</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">白銀投資進退場監控</p>
+        <h1>Taylor Silver Dashboard</h1>
+      </div>
+      <div class="target-tabs" role="tablist" aria-label="標的切換">
+        <button class="target-tab active" data-symbol="00738U" type="button">00738U</button>
+        <button class="target-tab" data-symbol="SLV" type="button">SLV</button>
+        <button class="target-tab" data-symbol="XAGUSD" type="button">XAG/USD</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="signal-panel" id="signalPanel">
+        <div>
+          <p class="panel-label">目前燈號</p>
+          <div class="signal-title" id="signalTitle">讀取中</div>
+          <p class="signal-message" id="signalMessage">正在讀取白銀監控資料。</p>
+        </div>
+        <div class="signal-meta">
+          <span id="currentTarget">--</span>
+          <span id="updatedAt">--</span>
+          <span id="dataDelayBadge" class="badge">mock data</span>
+        </div>
+      </section>
+
+      <section class="grid metrics-grid" id="metricsGrid" aria-label="核心監控卡片"></section>
+
+      <section class="content-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>技術圖表</h2>
+            <span class="muted">K 線、成交量、KD、MACD 與歷史燈號</span>
+          </div>
+          <div class="chart-stack">
+            <canvas id="priceCanvas" height="210"></canvas>
+            <canvas id="indicatorCanvas" height="190"></canvas>
+          </div>
+        </section>
+
+        <section class="panel settings-panel">
+          <div class="panel-head">
+            <h2>使用者設定</h2>
+            <span class="muted">儲存在本機瀏覽器 localStorage</span>
+          </div>
+          <form id="settingsForm" class="settings-form">
+            <label>
+              標的
+              <select name="symbol">
+                <option value="00738U">00738U 元大道瓊白銀ER</option>
+                <option value="SLV">SLV iShares Silver Trust</option>
+                <option value="XAGUSD">XAG/USD 白銀現貨</option>
+              </select>
+            </label>
+            <label class="checkbox-row">
+              <input type="checkbox" name="isHolding" />
+              是否持有
+            </label>
+            <label>
+              平均成本
+              <input name="averageCost" type="number" min="0" step="0.01" />
+            </label>
+            <label>
+              持有數量
+              <input name="quantity" type="number" min="0" step="0.0001" />
+            </label>
+            <label>
+              預計投入總資金
+              <input name="plannedCapital" type="number" min="0" step="1" />
+            </label>
+            <label>
+              分批買進份數
+              <input name="buyTranches" type="number" min="1" max="10" step="1" />
+            </label>
+            <label>
+              停損比例
+              <input name="stopLossRatio" type="number" min="1" max="80" step="1" />
+            </label>
+            <button type="submit">儲存設定</button>
+          </form>
+        </section>
+      </section>
+
+      <section class="content-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>TradingView 參考圖</h2>
+            <span class="muted">僅供看盤，不從 iframe 擷取資料</span>
+          </div>
+          <div class="tradingview-widget-container">
+            <div id="tradingview_chart"></div>
+          </div>
+        </section>
+
+        <section class="panel news-panel">
+          <div class="panel-head">
+            <h2>News Panel</h2>
+            <span class="muted">新聞僅輔助，不觸發買賣燈號</span>
+          </div>
+          <div class="news-summary">
+            <div><strong id="news24h">0</strong><span>最近 24 小時</span></div>
+            <div><strong id="news7d">0</strong><span>最近 7 天</span></div>
+          </div>
+          <div id="newsList" class="news-list"></div>
+        </section>
+      </section>
+
+      <section class="disclaimer">
+        本系統僅供投資紀律追蹤與風險提示，不構成買賣建議，不得自動下單，所有決策需人工確認。
+      </section>
+    </main>
+
+    <script src="https://s3.tradingview.com/tv.js"></script>
+    <script src="./assets/app.js"></script>
+  </body>
+</html>

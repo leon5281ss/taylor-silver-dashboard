@@ -1,0 +1,27 @@
+{
+  "project": "taylor-silver-dashboard",
+  "assets": [
+    {
+      "symbol": "00738U",
+      "name": "元大道瓊白銀ER",
+      "preferredSources": ["FinMind", "Fugle"],
+      "notes": "需要 API Key 時由本機環境變數提供，不寫死在前端。"
+    },
+    {
+      "symbol": "SLV",
+      "name": "iShares Silver Trust",
+      "preferredSources": ["Alpha Vantage", "Stooq", "Yahoo Finance backup"],
+      "notes": "免費資料可能延遲，前端需顯示資料延遲。"
+    },
+    {
+      "symbol": "XAGUSD",
+      "name": "白銀現貨參考",
+      "preferredSources": ["free metals endpoint", "free FX endpoint", "mock"],
+      "notes": "用於輔助判斷白銀大方向。"
+    }
+  ],
+  "defaults": {
+    "buyTranches": 3,
+    "stopLossRatio": 10
+  }
+}
