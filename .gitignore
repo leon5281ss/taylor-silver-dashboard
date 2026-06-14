@@ -1,1 +1,4 @@
 taylor-silver-dashboard/
+.python_deps/
+__pycache__/
+*.pyc
