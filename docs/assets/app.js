@@ -1,5 +1,6 @@
 const STORAGE_KEY = "taylorSilverSettings.v2";
 const DATA_URL = "./data/silver.json";
+const MACRO_URL = "./data/macro_theme.json";
 const SYMBOLS = ["00738U", "SLV", "XAGUSD"];
 const SYMBOL_LABELS = {
   "00738U": "00738U",
@@ -22,6 +23,16 @@ const fallbackData = {
   assets: {}
 };
 
+const fallbackMacroData = {
+  updatedAt: new Date().toISOString(),
+  dataStatus: "partial",
+  macroThemeScore: 51,
+  macroThemeLabel: "中性觀望",
+  macroThemeDescription: "多空條件混雜，不適合追高。",
+  summary: "宏觀資料不足，暫以中性觀望處理，需要人工確認。",
+  items: {}
+};
+
 const defaultSettings = {
   symbol: "00738U",
   isHolding: false,
@@ -34,6 +45,7 @@ const defaultSettings = {
 
 let appState = {
   data: fallbackData,
+  macro: fallbackMacroData,
   selectedSymbol: "00738U",
   expandedSymbol: "00738U",
   tvExpanded: false,
@@ -245,6 +257,24 @@ function dataStatusText(status) {
   }[status] || "資料狀態不明";
 }
 
+function macroStatusText(status) {
+  return {
+    bullish: "偏多",
+    neutral: "中性",
+    bearish: "偏空"
+  }[status] || "需要人工確認";
+}
+
+function combinedActionHint(signalType, macroScore) {
+  if (signalType === "stop") return "停損優先於所有宏觀與題材分數。";
+  if (signalType === "ready" && macroScore >= 65) return "技術與宏觀同步偏多，可依原計畫分批買進。";
+  if (signalType === "ready" && macroScore < 45) return "技術面出現進場訊號，但宏觀環境偏弱，建議降低部位或等待確認。";
+  if (signalType === "hold" && macroScore >= 65) return "宏觀環境偏多，但技術面尚未到進場點，建議觀察不追高。";
+  if (signalType === "exit" && macroScore >= 65) return "宏觀仍偏多，但短線過熱，建議分批停利而非情緒化追高。";
+  if (signalType === "exit" && macroScore < 45) return "技術與宏觀同步轉弱，停利或降低部位優先。";
+  return "宏觀與題材分數僅作信心加權與部位大小參考，仍需以技術燈號與風控為主。";
+}
+
 function volumeNote(latest) {
   if (!latest || !Number.isFinite(Number(latest.volumeRatio20))) return "資料不足";
   if (Number(latest.volumeRatio20) >= 1.5 && Number(latest.k) < 20) return "恐慌量放大";
@@ -303,6 +333,30 @@ function renderSourceStrip() {
   document.getElementById("sourceStrip").innerHTML = items
     .map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`)
     .join("");
+}
+
+function renderMacroThemePanel(signal) {
+  const macro = appState.macro || fallbackMacroData;
+  const score = Number.isFinite(Number(macro.macroThemeScore)) ? Number(macro.macroThemeScore) : 0;
+  const scoreRing = document.getElementById("macroScoreRing");
+  scoreRing.textContent = `${score}/100`;
+  scoreRing.style.setProperty("--score", `${Math.max(0, Math.min(score, 100))}%`);
+  document.getElementById("macroThemeLabel").textContent = macro.macroThemeLabel || "需要人工確認";
+  document.getElementById("macroThemeSummary").textContent = macro.summary || macro.macroThemeDescription || "資料不足，暫以中性處理。";
+  document.getElementById("combinedActionHint").textContent = combinedActionHint(signal.type, score);
+
+  const entries = Object.entries(macro.items || {});
+  document.getElementById("macroItems").innerHTML = entries.map(([, item]) => `
+    <article class="macro-item ${item.status || "neutral"}">
+      <div>
+        <span>${item.name || "未命名指標"}</span>
+        <strong>${formatNumber(item.score, 0)} / ${formatNumber(item.maxScore, 0)}</strong>
+      </div>
+      <p><b>狀態：</b>${macroStatusText(item.status)}</p>
+      <p><b>說明：</b>${item.value || item.label || "資料不足，暫以中性處理"}</p>
+      <p><b>來源：</b>${item.source || "需要人工確認"}</p>
+    </article>
+  `).join("");
 }
 
 function renderComparisonCards() {
@@ -764,6 +818,7 @@ function renderDashboard() {
   document.getElementById("dataDelayBadge").textContent = `${dataStatusText(appState.data.dataStatus)} / ${asset.dataDelay ? "資料延遲" : "即時或近即時"}`;
   renderSourceStrip();
   renderComparisonCards();
+  renderMacroThemePanel(signal);
   renderMetrics(asset, latest, signal, pnl);
   renderConditionChecklist(asset, latest);
   renderChartValueRow(asset, latest);
@@ -816,6 +871,12 @@ async function init() {
     appState.data = await response.json();
   } catch (error) {
     console.warn("Unable to load silver.json; using fallback data.", error);
+  }
+  try {
+    const macroResponse = await fetch(MACRO_URL, { cache: "no-store" });
+    appState.macro = await macroResponse.json();
+  } catch (error) {
+    console.warn("Unable to load macro_theme.json; using fallback macro data.", error);
   }
   appState.selectedSymbol = appState.settings.symbol || "00738U";
   appState.expandedSymbol = appState.selectedSymbol;

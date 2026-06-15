@@ -40,18 +40,20 @@ jobs:
         if: github.event_name != 'push'
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-        run: python scripts/update_silver_data.py
+        run: |
+          python scripts/update_silver_data.py
+          python scripts/update_macro_theme.py
 
-      - name: Commit updated silver data
+      - name: Commit updated market data
         if: github.event_name != 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/silver.json
+          git add docs/data
           if git diff --cached --quiet; then
-            echo "No silver data changes to commit."
+            echo "No market data changes to commit."
           else
-            git commit -m "Update silver market data"
+            git commit -m "Update silver and macro data"
             git push
           fi
 

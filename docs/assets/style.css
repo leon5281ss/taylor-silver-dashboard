@@ -94,6 +94,7 @@ button:hover {
 
 .signal-panel,
 .source-strip,
+.macro-panel,
 .panel,
 .compare-card,
 .metric-card,
@@ -110,6 +111,106 @@ button:hover {
   gap: 1px;
   overflow: hidden;
   box-shadow: none;
+}
+
+.macro-panel {
+  padding: 18px;
+}
+
+.macro-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.macro-score-ring {
+  --score: 0%;
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, #ffffff 58%, transparent 59%),
+    conic-gradient(var(--blue) var(--score), #e5e7eb 0);
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.macro-text {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.combined-hint {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.macro-details {
+  margin-top: 14px;
+}
+
+.macro-details summary {
+  cursor: pointer;
+  color: var(--blue);
+  font-weight: 900;
+}
+
+.macro-items {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.macro-item {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--gray);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.macro-item.bullish {
+  border-left-color: var(--green);
+}
+
+.macro-item.bearish {
+  border-left-color: var(--red);
+}
+
+.macro-item div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.macro-item span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.macro-item strong {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.macro-item p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .source-strip div {
@@ -698,7 +799,8 @@ form button {
 @media (max-width: 1100px) {
   .source-strip,
   .comparison-grid,
-  .tech-dashboard {
+  .tech-dashboard,
+  .macro-items {
     grid-template-columns: 1fr;
   }
 
@@ -788,6 +890,10 @@ form button {
     order: 4;
   }
 
+  .macro-panel {
+    order: 2;
+  }
+
   .tech-dashboard {
     order: 5;
   }
@@ -810,6 +916,17 @@ form button {
 
   .compare-secondary {
     display: none;
+  }
+
+  .macro-summary {
+    grid-template-columns: 82px 1fr;
+    gap: 12px;
+  }
+
+  .macro-score-ring {
+    width: 82px;
+    height: 82px;
+    font-size: 17px;
   }
 
   .signal-title {

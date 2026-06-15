@@ -1,0 +1,89 @@
+{
+  "updatedAt": "2026-06-15T23:41:38+08:00",
+  "dataStatus": "partial",
+  "macroThemeScore": 48,
+  "macroThemeLabel": "中性觀望",
+  "macroThemeDescription": "多空條件混雜，不適合追高。",
+  "items": {
+    "dxy": {
+      "score": 7,
+      "maxScore": 15,
+      "name": "美元指數 DXY",
+      "label": "美元中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "realYield": {
+      "score": 7,
+      "maxScore": 15,
+      "name": "美國10年實質利率",
+      "label": "實質利率中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "fedExpectation": {
+      "score": 5,
+      "maxScore": 10,
+      "name": "Fed降息預期",
+      "label": "降息預期中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "etfFlow": {
+      "score": 7,
+      "maxScore": 15,
+      "name": "SLV / 白銀ETF資金流",
+      "label": "ETF資金平穩",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "openInterest": {
+      "score": 5,
+      "maxScore": 10,
+      "name": "白銀期貨未平倉量",
+      "label": "期貨未平倉量中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "cftcPosition": {
+      "score": 5,
+      "maxScore": 10,
+      "name": "CFTC投機淨部位",
+      "label": "投機部位中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "goldSilverRatio": {
+      "score": 5,
+      "maxScore": 10,
+      "name": "金銀比",
+      "label": "金銀比中性",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    },
+    "themeHeat": {
+      "score": 7,
+      "maxScore": 15,
+      "name": "白銀供需 / 題材熱度",
+      "label": "題材中性，需人工確認",
+      "value": "資料不足，暫以中性處理",
+      "status": "neutral",
+      "source": "manual fallback"
+    }
+  },
+  "sourceStatus": {
+    "dxy:DX-Y.NYB": "yfinance is not installed",
+    "dxy:DX=F": "yfinance is not installed",
+    "dxy:UUP": "yfinance is not installed",
+    "goldSilverRatio": "yfinance is not installed",
+    "manualFallback": "realYield、fedExpectation、etfFlow、openInterest、cftcPosition、themeHeat 第一版暫以中性或需人工確認處理"
+  },
+  "summary": "中性觀望：多空條件混雜，不適合追高。 宏觀與題材分數只作為信心加權與部位大小參考，仍需搭配 KD / MACD 技術燈號確認。"
+}
