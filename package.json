@@ -1,0 +1,10 @@
+{
+  "name": "taylor-silver-dashboard",
+  "version": "0.4.0",
+  "private": true,
+  "scripts": {
+    "check:js": "node --check docs/assets/app.js",
+    "test:tsi": "node scripts/verify_tsi_scenarios.mjs",
+    "test": "npm run check:js && npm run test:tsi"
+  }
+}

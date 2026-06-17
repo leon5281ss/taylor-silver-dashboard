@@ -310,6 +310,150 @@ function conditionChecks(latest, rows, settings) {
   ];
 }
 
+function average(values) {
+  const clean = values.map(Number).filter(Number.isFinite);
+  return clean.length ? clean.reduce((sum, value) => sum + value, 0) / clean.length : null;
+}
+
+function standardDeviation(values) {
+  const avg = average(values);
+  if (!Number.isFinite(avg)) return null;
+  const clean = values.map(Number).filter(Number.isFinite);
+  return Math.sqrt(clean.reduce((sum, value) => sum + (value - avg) ** 2, 0) / clean.length);
+}
+
+function latestSma(rows, period) {
+  return average(rows.slice(-period).map((row) => row.close));
+}
+
+function calculateRSIValue(rows, period = 14) {
+  if (rows.length <= period) return null;
+  const slice = rows.slice(-(period + 1));
+  let gains = 0;
+  let losses = 0;
+  for (let index = 1; index < slice.length; index += 1) {
+    const diff = Number(slice[index].close) - Number(slice[index - 1].close);
+    if (diff >= 0) gains += diff;
+    else losses += Math.abs(diff);
+  }
+  const avgGain = gains / period;
+  const avgLoss = losses / period;
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - 100 / (1 + rs);
+}
+
+function calculateATRValue(rows, period = 14) {
+  if (rows.length <= period) return null;
+  const slice = rows.slice(-(period + 1));
+  const ranges = [];
+  for (let index = 1; index < slice.length; index += 1) {
+    const high = Number(slice[index].high);
+    const low = Number(slice[index].low);
+    const prevClose = Number(slice[index - 1].close);
+    ranges.push(Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose)));
+  }
+  return average(ranges);
+}
+
+function scoreConditions(conditions) {
+  const available = conditions.filter((condition) => condition.available !== false);
+  if (!available.length) return 0;
+  const passed = available.filter((condition) => condition.pass).length;
+  return Math.round((passed / available.length) * 100);
+}
+
+function tsiLight(score) {
+  if (score >= 75) return { type: "green", label: "綠燈", advice: "可分批買進" };
+  if (score >= 60) return { type: "lime", label: "黃綠燈", advice: "小量試單" };
+  if (score >= 45) return { type: "yellow", label: "黃燈", advice: "觀察" };
+  if (score >= 30) return { type: "orange", label: "橘燈", advice: "暫停加碼" };
+  return { type: "red", label: "紅燈", advice: "不買 / 降低部位" };
+}
+
+function calculateTaylorSilverIndex(asset) {
+  const rows = asset.prices || [];
+  const latest = rows.at(-1);
+  if (!latest || rows.length < 20) {
+    return {
+      dataInsufficient: true,
+      totalScore: null,
+      trendScore: null,
+      panicScore: null,
+      riskScore: null,
+      light: { type: "red", label: "資料不足", advice: "需要人工確認" },
+      groups: {
+        trend: [{ label: "K線資料", pass: false, available: false, detail: `僅 ${rows.length} 日，少於 20 日，不計算 TSI` }],
+        panic: [{ label: "K線資料", pass: false, available: false, detail: `僅 ${rows.length} 日，少於 20 日，不計算 TSI` }],
+        risk: [{ label: "K線資料", pass: false, available: false, detail: `僅 ${rows.length} 日，少於 20 日，不計算 TSI` }]
+      }
+    };
+  }
+
+  const ma5 = latestSma(rows, 5);
+  const ma10 = latestSma(rows, 10);
+  const ma20 = latestSma(rows, 20);
+  const close = Number(latest.close);
+  const volume = Number(latest.volume || 0);
+  const volume5 = average(rows.slice(-5).map((row) => row.volume));
+  const highs20 = rows.slice(-20).map((row) => Number(row.high));
+  const lows20 = rows.slice(-20).map((row) => Number(row.low));
+  const high20 = Math.max(...highs20);
+  const low20 = Math.min(...lows20);
+  const rangePosition20 = high20 === low20 ? 0.5 : (close - low20) / (high20 - low20);
+  const rsi = calculateRSIValue(rows);
+  const atr = calculateATRValue(rows);
+  const closes20 = rows.slice(-20).map((row) => Number(row.close));
+  const sd20 = standardDeviation(closes20);
+  const bollingerLower = Number.isFinite(ma20) && Number.isFinite(sd20) ? ma20 - 2 * sd20 : null;
+  const bollingerUpper = Number.isFinite(ma20) && Number.isFinite(sd20) ? ma20 + 2 * sd20 : null;
+  const hist = getRecentHist(rows);
+  const previousLow = Math.min(...rows.slice(-6, -1).map((row) => Number(row.low)));
+  const fiveDayChange = rows.length >= 6 ? ((close - Number(rows.at(-6).close)) / Number(rows.at(-6).close)) * 100 : null;
+  const ratioItem = appState.macro?.items?.goldSilverRatio;
+  const goldSilverFastDown = ratioItem?.status === "bullish" && Number(ratioItem?.score) >= Number(ratioItem?.maxScore || 10);
+
+  const trend = [
+    { label: "Close > MA20", pass: close > ma20, detail: `收盤價 ${formatNumber(close)} / MA20 ${formatNumber(ma20)}` },
+    { label: "MA5 > MA10", pass: ma5 > ma10, detail: `MA5 ${formatNumber(ma5)} / MA10 ${formatNumber(ma10)}` },
+    { label: "MA10 > MA20", pass: ma10 > ma20, detail: `MA10 ${formatNumber(ma10)} / MA20 ${formatNumber(ma20)}` },
+    { label: "MACD柱狀圖 > 0", pass: Number(latest.macdHistogram) > 0, detail: `Hist ${formatNumber(latest.macdHistogram, 4)}` },
+    { label: "近20日區間位置 > 60%", pass: rangePosition20 >= 0.6, detail: `${formatNumber(rangePosition20 * 100, 1)}%` },
+    { label: "成交量 > 5日均量", pass: volume > volume5, detail: `成交量 ${formatNumber(volume, 0)} / 5日均量 ${formatNumber(volume5, 0)}` }
+  ];
+
+  const panic = [
+    { label: "KD_K < 20", pass: Number(latest.k) < 20, detail: `K ${formatNumber(latest.k)}` },
+    { label: "RSI < 35", pass: Number(rsi) < 35, detail: `RSI ${formatNumber(rsi)}` },
+    { label: "MACD負值且縮短", pass: Number(latest.macdHistogram) < 0 && detectMacdGreenShrinking(hist), detail: hist.map((value) => formatNumber(value, 4)).join(" → ") },
+    { label: "接近布林下緣", pass: Number.isFinite(bollingerLower) && Number.isFinite(bollingerUpper) && close <= bollingerLower + (bollingerUpper - bollingerLower) * 0.2, detail: `下緣 ${formatNumber(bollingerLower)} / 收盤 ${formatNumber(close)}` },
+    { label: "收在當日K線中上半部", pass: close >= (Number(latest.high) + Number(latest.low)) / 2, detail: `高 ${formatNumber(latest.high)} / 低 ${formatNumber(latest.low)}` },
+    { label: "沒有跌破前低", pass: Number(latest.low) >= previousLow, detail: `今日低 ${formatNumber(latest.low)} / 前低 ${formatNumber(previousLow)}` }
+  ];
+
+  const risk = [
+    { label: "RSI > 75", pass: Number(rsi) > 75, detail: `RSI ${formatNumber(rsi)}` },
+    { label: "遠離MA20超過2.5 ATR", pass: Number.isFinite(atr) && Math.abs(close - ma20) > 2.5 * atr, detail: `距離 ${formatNumber(Math.abs(close - ma20))} / 2.5ATR ${formatNumber(2.5 * atr)}` },
+    { label: "短線漲幅過大", pass: Number(fiveDayChange) > 8, detail: `5日漲幅 ${formatPercent(fiveDayChange)}` },
+    { label: "金銀比快速下降", pass: goldSilverFastDown, detail: ratioItem?.value || "資料待接入" },
+    { label: "CFTC投機多單擁擠", pass: false, available: false, detail: "資料待接入" },
+    { label: "SLV或00738U明顯溢價", pass: false, available: false, detail: "資料待接入" }
+  ];
+
+  const trendScore = scoreConditions(trend);
+  const panicScore = scoreConditions(panic);
+  const riskScore = scoreConditions(risk);
+  const totalScore = Math.round(trendScore * 0.35 + panicScore * 0.4 + (100 - riskScore) * 0.25);
+  return {
+    totalScore,
+    trendScore,
+    panicScore,
+    riskScore,
+    light: tsiLight(totalScore),
+    groups: { trend, panic, risk }
+  };
+}
+
 function statusBadges(latest, rows) {
   const hist = getRecentHist(rows);
   const badges = [];
@@ -356,6 +500,49 @@ function renderMacroThemePanel(signal) {
       <p><b>說明：</b>${item.value || item.label || "資料不足，暫以中性處理"}</p>
       <p><b>來源：</b>${item.source || "需要人工確認"}</p>
     </article>
+  `).join("");
+}
+
+function renderTsiPanel(asset, signal) {
+  const tsi = calculateTaylorSilverIndex(asset);
+  const stopTriggered = signal?.type === "stop";
+  const visibleLight = stopTriggered
+    ? { type: "red", label: "停損優先", advice: "暫停買進 / 降低部位" }
+    : tsi.light;
+  const panel = document.getElementById("tsiPanel");
+  panel.className = `tsi-panel ${visibleLight.type}`;
+  document.getElementById("tsiScore").textContent = tsi.dataInsufficient ? "資料不足" : `${tsi.totalScore}/100`;
+  document.getElementById("tsiSignal").textContent = `${visibleLight.label}｜${visibleLight.advice}`;
+  document.getElementById("tsiAdvice").textContent = stopTriggered
+    ? "TSI 是第二層確認濾網；目前原始技術燈號已觸發停損，停損優先於所有 TSI 分數。"
+    : tsi.dataInsufficient
+      ? "TSI 是第二層確認濾網；目前 K 線資料不足，暫不計算 TSI，需人工確認。"
+      : `TSI 是第二層確認濾網，不改變原本技術燈號；目前濾網提示：${tsi.light.advice}。`;
+  document.getElementById("tsiFinalAction").textContent = stopTriggered
+    ? "最終操作建議：停損優先，暫停買進並降低部位，所有決策需人工確認。"
+    : tsi.dataInsufficient
+      ? "最終操作建議：資料不足，不計算 TSI；保留原始技術燈號並等待資料補齊。"
+      : `最終操作建議：原始技術燈號為「${signal?.label || "資料不足"}」，TSI 濾網為「${tsi.light.label}」，請以風控與人工確認為準。`;
+  document.getElementById("tsiTrendScore").textContent = tsi.dataInsufficient ? "資料不足" : `${tsi.trendScore}/100`;
+  document.getElementById("tsiPanicScore").textContent = tsi.dataInsufficient ? "資料不足" : `${tsi.panicScore}/100`;
+  document.getElementById("tsiRiskScore").textContent = tsi.dataInsufficient ? "資料不足" : `${tsi.riskScore}/100`;
+
+  const groupLabels = {
+    trend: "Silver Trend Index 趨勢分數",
+    panic: "Silver Panic Buy Index 恐慌低接分數",
+    risk: "Silver Risk Index 風險分數"
+  };
+  document.getElementById("tsiDetails").innerHTML = Object.entries(tsi.groups).map(([key, conditions]) => `
+    <section>
+      <h3>${groupLabels[key]}</h3>
+      ${conditions.map((condition) => `
+        <div class="${condition.available === false ? "pending" : condition.pass ? "pass" : "fail"}">
+          <strong>${condition.available === false ? "待接入" : condition.pass ? "是" : "否"}</strong>
+          <span>${condition.label}</span>
+          <em>${condition.detail}</em>
+        </div>
+      `).join("")}
+    </section>
   `).join("");
 }
 
@@ -819,6 +1006,7 @@ function renderDashboard() {
   renderSourceStrip();
   renderComparisonCards();
   renderMacroThemePanel(signal);
+  renderTsiPanel(asset, signal);
   renderMetrics(asset, latest, signal, pnl);
   renderConditionChecklist(asset, latest);
   renderChartValueRow(asset, latest);
@@ -926,13 +1114,21 @@ async function init() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", init);
+}
 
-window.calculateKDJ = calculateKDJ;
-window.calculateMACD = calculateMACD;
-window.detectMacdGreenShrinking = detectMacdGreenShrinking;
-window.detectMacdRedShrinking = detectMacdRedShrinking;
-window.calculateVolumeRatio = calculateVolumeRatio;
-window.evaluateSilverSignal = evaluateSilverSignal;
-window.calculatePositionPnl = calculatePositionPnl;
-window.renderDashboard = renderDashboard;
+if (typeof window !== "undefined") {
+  window.calculateKDJ = calculateKDJ;
+  window.calculateMACD = calculateMACD;
+  window.detectMacdGreenShrinking = detectMacdGreenShrinking;
+  window.detectMacdRedShrinking = detectMacdRedShrinking;
+  window.calculateVolumeRatio = calculateVolumeRatio;
+  window.evaluateSilverSignal = evaluateSilverSignal;
+  window.calculatePositionPnl = calculatePositionPnl;
+  window.calculateTaylorSilverIndex = calculateTaylorSilverIndex;
+  window.renderDashboard = renderDashboard;
+  window.__setTaylorSilverTestMacro = (macro) => {
+    appState.macro = macro || fallbackMacroData;
+  };
+}

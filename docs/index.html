@@ -22,7 +22,7 @@
     <main class="layout">
       <section class="signal-panel" id="signalPanel">
         <div>
-          <p class="panel-label">目前燈號</p>
+          <p class="panel-label">原始技術燈號：KD / MACD / 停損</p>
           <div class="signal-title" id="signalTitle">讀取中</div>
           <p class="signal-message" id="signalMessage">正在讀取白銀監控資料。</p>
           <div class="signal-numbers" id="signalNumbers"></div>
@@ -49,6 +49,28 @@
         <details class="macro-details">
           <summary>展開 8 個評分細項</summary>
           <div class="macro-items" id="macroItems"></div>
+        </details>
+      </section>
+
+      <section class="tsi-panel" id="tsiPanel" aria-label="Taylor Silver Index">
+        <div class="tsi-head">
+          <div>
+            <p class="panel-label">第二層確認濾網</p>
+            <h2>Taylor Silver Index</h2>
+          </div>
+          <div class="tsi-score" id="tsiScore">--</div>
+        </div>
+        <div class="tsi-signal" id="tsiSignal">讀取中</div>
+        <p class="tsi-advice" id="tsiAdvice">正在計算白銀綜合指數。</p>
+        <p class="tsi-final" id="tsiFinalAction">最終操作建議：等待資料確認。</p>
+        <div class="tsi-subgrid">
+          <article><span>趨勢分數</span><strong id="tsiTrendScore">--</strong></article>
+          <article><span>低接分數</span><strong id="tsiPanicScore">--</strong></article>
+          <article><span>風險分數</span><strong id="tsiRiskScore">--</strong></article>
+        </div>
+        <details class="tsi-details">
+          <summary>展開 TSI 條件明細</summary>
+          <div class="tsi-detail-grid" id="tsiDetails"></div>
         </details>
       </section>
 

@@ -97,6 +97,92 @@ http://localhost:8080/docs/
 
 資料不足時，該項目給中性分，並在畫面顯示「資料不足，暫以中性處理」或「需要人工確認」。停損仍是最高優先，若觸發停損，宏觀分數不會覆蓋停損提示。
 
+## Taylor Silver Index
+
+Taylor Silver Index，簡稱 `TSI`，是白銀綜合判斷分數，範圍為 `0～100`。它是第二層確認濾網，不會取代原本 KD / MACD 技術燈號，也不會覆蓋停損規則。
+
+TSI 由三個子指數組成：
+
+- `Silver Trend Index`：趨勢分數，檢查收盤價與 MA20、MA5/MA10/MA20 多頭排列、MACD柱狀圖、近20日區間位置與成交量。
+- `Silver Panic Buy Index`：恐慌低接分數，檢查 K 值、RSI、MACD綠柱縮短、布林通道下緣、日K收盤位置與是否跌破前低。
+- `Silver Risk Index`：風險分數，檢查 RSI 過熱、價格遠離 MA20、短線漲幅過大、金銀比快速下降，以及 CFTC / 溢價資料待接入欄位。
+
+TSI 公式：
+
+```text
+TSI = 0.35 * TrendScore + 0.40 * PanicBuyScore + 0.25 * (100 - RiskScore)
+```
+
+`Silver Risk Index` 是風險分數，不會直接加到 TSI；風險越高，`100 - RiskScore` 越低，TSI 會被壓低。CFTC COT 與 ETF 溢價等「資料待接入」條件暫不參與分數計算，避免用 0 分造成失真。
+
+TSI 燈號：
+
+- `TSI >= 75`：綠燈，顯示「可分批買進」
+- `TSI 60～74`：黃綠燈，顯示「小量試單」
+- `TSI 45～59`：黃燈，顯示「觀察」
+- `TSI 30～44`：橘燈，顯示「暫停加碼」
+- `TSI < 30`：紅燈，顯示「不買 / 降低部位」
+
+TSI 使用 JavaScript 在前端依現有日線資料計算，不使用通達信公式語法。CFTC COT 與 ETF 溢價欄位第一版先顯示「資料待接入」。
+
+若原始技術燈號觸發 `⚠️ 紀律停損`，畫面會顯示「停損優先 / 暫停買進 / 降低部位」。即使 TSI 分數高於 75，也不會顯示可分批買進。
+
+TSI 是輔助判斷工具，不是單獨買賣訊號，不構成投資建議；所有操作仍需人工確認。
+
+## 驗收測試情境
+
+可執行以下指令驗收 TSI 情境：
+
+```bash
+node scripts/verify_tsi_scenarios.mjs
+```
+
+目前驗收情境與預期結果：
+
+1. `TSI >= 75`，但原始技術燈號觸發紀律停損  
+   預期：畫面與最終操作建議必須顯示「停損優先 / 暫停買進 / 降低部位」，不可顯示「可分批買進」。
+
+2. 趨勢分數高、低接分數低、風險分數低  
+   預期：`Silver Trend Index` 應偏高，TSI 反映趨勢加分，但仍不覆蓋原始技術燈號。
+
+3. 低接分數高、趨勢分數低、風險分數低  
+   預期：`Silver Panic Buy Index` 應偏高，TSI 可提高低接信心，但仍需 KD / MACD 原始燈號確認。
+
+4. 風險分數高  
+   預期：`Silver Risk Index` 越高，`100 - RiskScore` 越低，TSI 必須下降。
+
+5. CFTC / 溢價資料待接入  
+   預期：`available:false` 的條件不參與分數計算，不以 0 分扭曲 TSI。
+
+6. K線資料少於 20 日  
+   預期：不計算 TSI，顯示「資料不足 / 需要人工確認」，不可亂給分數。
+
+## 本機驗收指令
+
+部署前可在專案根目錄執行：
+
+```bash
+npm test
+```
+
+也可以分開執行：
+
+```bash
+node --check docs/assets/app.js
+node scripts/verify_tsi_scenarios.mjs
+```
+
+`npm test` 會先檢查 `docs/assets/app.js` 語法，再執行 TSI 六大情境測試。
+
+## 部署前檢查清單
+
+- `app.js` 語法檢查通過。
+- TSI 六大情境測試通過。
+- 停損優先沒有被覆蓋。
+- CFTC / 溢價待接入條件不參與分數計算。
+- 少於 20 日 K 線時顯示「資料不足」。
+- 手動開啟 `docs/index.html` 或本機 server，確認瀏覽器 Console 無紅色錯誤。
+
 ## 如何修改停損比例
 
 預設停損比例是 `10%`。
