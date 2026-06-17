@@ -8,6 +8,7 @@ from decimal import Decimal
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from collections.abc import Mapping, Sequence
 
 import pandas as pd
 import requests
@@ -54,9 +55,30 @@ def safe_print(message: str) -> None:
     print(message, flush=True)
 
 
-def json_default(value: object) -> object:
+def json_default_fallback(value: object) -> object:
+    if isinstance(value, Decimal):
+        return float(value)
+    if isinstance(value, (datetime, date, pd.Timestamp)):
+        return value.isoformat()
+    try:
+        import numpy as np
+
+        if isinstance(value, np.integer):
+            return int(value)
+        if isinstance(value, np.floating):
+            number = float(value)
+            return None if not math.isfinite(number) else number
+        if isinstance(value, np.bool_):
+            return bool(value)
+    except Exception:
+        pass
+    try:
+        if pd.isna(value):
+            return None
+    except Exception:
+        pass
     safe_print(f"Unsupported JSON type fallback: {type(value).__name__}")
-    return to_json_safe(value)
+    return str(value)
 
 
 def to_json_safe(value: object) -> object:
@@ -105,6 +127,65 @@ def to_json_safe(value: object) -> object:
         except Exception:
             pass
     return str(value)
+
+
+def collect_non_json_types(value: object, path: str = "payload", found: list[tuple[str, str]] | None = None, limit: int = 10) -> list[tuple[str, str]]:
+    if found is None:
+        found = []
+    if len(found) >= limit:
+        return found
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return found
+    if isinstance(value, Decimal):
+        return found
+    if isinstance(value, (datetime, date, pd.Timestamp)):
+        return found
+    if isinstance(value, dict):
+        for key, item in value.items():
+            collect_non_json_types(item, f'{path}["{key}"]', found, limit)
+            if len(found) >= limit:
+                break
+        return found
+    if isinstance(value, (list, tuple)):
+        for idx, item in enumerate(value):
+            collect_non_json_types(item, f"{path}[{idx}]", found, limit)
+            if len(found) >= limit:
+                break
+        return found
+    if isinstance(value, pd.Series):
+        return collect_non_json_types(value.to_dict(), path, found, limit)
+    if isinstance(value, pd.DataFrame):
+        return collect_non_json_types(value.to_dict(orient="records"), path, found, limit)
+    try:
+        import numpy as np
+
+        if isinstance(value, (np.integer, np.floating, np.bool_, np.ndarray)):
+            return found
+    except Exception:
+        pass
+    try:
+        if pd.isna(value):
+            return found
+    except Exception:
+        pass
+    found.append((type(value).__name__, path))
+    return found
+
+
+def write_json_safe(path: Path, payload: object) -> None:
+    safe_payload = to_json_safe(payload)
+    unsafe = collect_non_json_types(safe_payload)
+    for type_name, found_path in unsafe:
+        safe_print(f"Non JSON-safe type found: {type_name} at {found_path}")
+    with path.open("w", encoding="utf-8") as fh:
+        json.dump(
+            safe_payload,
+            fh,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            default=json_default_fallback,
+        )
+    safe_print(f"JSON written: {path}")
 
 
 def load_source_config() -> dict[str, dict]:
@@ -574,14 +655,11 @@ def main() -> None:
     }
     out = ROOT / "docs" / "data"
     out.mkdir(parents=True, exist_ok=True)
-    safe_output = to_json_safe(payload)
     json_path = out / "stocks.json"
     js_path = out / "stocks-data.js"
-    with json_path.open("w", encoding="utf-8") as fh:
-        json.dump(safe_output, fh, ensure_ascii=False, separators=(",", ":"), default=json_default)
+    write_json_safe(json_path, payload)
     text = json_path.read_text(encoding="utf-8")
     js_path.write_text("window.STOCK_DASHBOARD_DATA = " + text + ";\n", encoding="utf-8")
-    safe_print(f"stocks.json written: {json_path}")
 
 
 if __name__ == "__main__":
