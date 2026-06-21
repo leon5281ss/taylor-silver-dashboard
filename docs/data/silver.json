@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-21T10:09:48+00:00",
+  "updatedAt": "2026-06-21T23:49:10+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -8580,13 +8580,13 @@
       "sourceLabel": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
-      "lastCloseDate": "2026-06-19",
-      "latestClose": 64.91,
-      "changePercent": -2.03,
+      "lastCloseDate": "2026-06-21",
+      "latestClose": 64.55,
+      "changePercent": -2.5734,
       "recentMacdHistogram": [
         -0.032046,
         -0.120565,
-        -0.234392
+        -0.257366
       ],
       "prices": [
         {
@@ -12823,21 +12823,21 @@
           "changePercent": -6.2818
         },
         {
-          "date": "2026-06-19",
-          "open": 65.785,
+          "date": "2026-06-21",
+          "open": 63.85,
           "high": 65.94,
           "low": 63.355,
-          "close": 64.91,
-          "volume": 19075,
-          "k": 38.0711,
-          "d": 39.2763,
-          "j": 35.6607,
-          "macd": -2.614922,
-          "macdSignal": -2.38053,
-          "macdHistogram": -0.234392,
-          "volumeRatio5": 4.988,
-          "volumeRatio20": 18.2449,
-          "changePercent": -2.03
+          "close": 64.55,
+          "volume": 20431,
+          "k": 36.4911,
+          "d": 38.7496,
+          "j": 31.9741,
+          "macd": -2.64364,
+          "macdSignal": -2.386273,
+          "macdHistogram": -0.257366,
+          "volumeRatio5": 4.9888,
+          "volumeRatio20": 18.3517,
+          "changePercent": -2.5734
         }
       ]
     }
@@ -12892,6 +12892,6 @@
   "lastCloseDate": {
     "00738U": "2026-06-18",
     "SLV": "2026-06-18",
-    "XAGUSD": "2026-06-19"
+    "XAGUSD": "2026-06-21"
   }
 }
