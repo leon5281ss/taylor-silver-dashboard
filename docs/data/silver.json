@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-06-23T10:09:56+00:00",
-  "dataStatus": "live",
+  "updatedAt": "2026-06-23T23:33:49+00:00",
+  "dataStatus": "partial",
   "keywords": {
     "english": [
       "silver",
@@ -4306,7 +4306,7 @@
       "name": "iShares Silver Trust",
       "typeLabel": "美股白銀 ETF",
       "currency": "USD",
-      "sourceStatus": "success",
+      "sourceStatus": "failed; kept previous data: yfinance returned no rows for SLV",
       "sourceLabel": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "source": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "dataDelay": true,
@@ -8581,12 +8581,12 @@
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
       "lastCloseDate": "2026-06-23",
-      "latestClose": 62.56,
-      "changePercent": -4.5279,
+      "latestClose": 61.34,
+      "changePercent": -6.3897,
       "recentMacdHistogram": [
         -0.120565,
         -0.195017,
-        -0.399192
+        -0.47705
       ],
       "prices": [
         {
@@ -12824,20 +12824,20 @@
         },
         {
           "date": "2026-06-23",
-          "open": 65.215,
-          "high": 65.315,
-          "low": 61.85,
-          "close": 62.56,
-          "volume": 22873,
-          "k": 28.9279,
-          "d": 36.1423,
-          "j": 14.4991,
-          "macd": -2.869677,
-          "macdSignal": -2.470484,
-          "macdHistogram": -0.399192,
-          "volumeRatio5": 4.9948,
-          "volumeRatio20": 18.5462,
-          "changePercent": -4.5279
+          "open": 61.63,
+          "high": 61.805,
+          "low": 61.13,
+          "close": 61.34,
+          "volume": 1139,
+          "k": 27.0399,
+          "d": 35.5129,
+          "j": 10.0939,
+          "macd": -2.966999,
+          "macdSignal": -2.489948,
+          "macdHistogram": -0.47705,
+          "volumeRatio5": 4.8968,
+          "volumeRatio20": 7.7694,
+          "changePercent": -6.3897
         }
       ]
     }
@@ -12876,7 +12876,7 @@
   ],
   "sourceStatus": {
     "00738U": "success",
-    "SLV": "success",
+    "SLV": "failed; kept previous data: yfinance returned no rows for SLV",
     "XAGUSD": "success"
   },
   "sourceLabel": {
