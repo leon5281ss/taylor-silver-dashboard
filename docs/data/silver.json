@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-24T09:56:47+00:00",
+  "updatedAt": "2026-06-24T23:38:12+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -4310,32 +4310,15 @@
       "sourceLabel": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "source": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "dataDelay": true,
-      "lastCloseDate": "2026-06-23",
-      "latestClose": 55.73,
-      "changePercent": -5.3981,
+      "lastCloseDate": "2026-06-24",
+      "latestClose": 51.78,
+      "changePercent": -7.0877,
       "recentMacdHistogram": [
-        -0.256973,
         -0.284328,
-        -0.469455
+        -0.469455,
+        -0.791834
       ],
       "prices": [
-        {
-          "date": "2025-06-25",
-          "open": 32.53,
-          "high": 33.01,
-          "low": 32.49,
-          "close": 33.01,
-          "volume": 12254300,
-          "k": 44.6587,
-          "d": 52.1856,
-          "j": 29.6049,
-          "macd": 0.711148,
-          "macdSignal": 0.780718,
-          "macdHistogram": -0.06957,
-          "volumeRatio5": 0.6173,
-          "volumeRatio20": 0.5084,
-          "changePercent": 1.2266
-        },
         {
           "date": "2025-06-26",
           "open": 33.13,
@@ -4890,7 +4873,7 @@
           "k": 66.458,
           "d": 59.3623,
           "j": 80.6495,
-          "macd": 0.215592,
+          "macd": 0.215593,
           "macdSignal": 0.29617,
           "macdHistogram": -0.080578,
           "volumeRatio5": 0.8719,
@@ -8558,16 +8541,33 @@
           "high": 56.51,
           "low": 55.47,
           "close": 55.73,
-          "volume": 20456200,
+          "volume": 20777800,
           "k": 22.9745,
           "d": 30.7983,
           "j": 7.3268,
           "macd": -2.786552,
           "macdSignal": -2.317097,
           "macdHistogram": -0.469455,
-          "volumeRatio5": 0.8847,
-          "volumeRatio20": 0.9494,
+          "volumeRatio5": 0.8961,
+          "volumeRatio20": 0.9636,
           "changePercent": -5.3981
+        },
+        {
+          "date": "2026-06-24",
+          "open": 52.94,
+          "high": 53.895,
+          "low": 50.31,
+          "close": 51.78,
+          "volume": 49435250,
+          "k": 18.7238,
+          "d": 26.7735,
+          "j": 2.6245,
+          "macd": -3.30689,
+          "macdSignal": -2.515056,
+          "macdHistogram": -0.791834,
+          "volumeRatio5": 1.6588,
+          "volumeRatio20": 2.1253,
+          "changePercent": -7.0877
         }
       ]
     },
@@ -8581,12 +8581,12 @@
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
       "lastCloseDate": "2026-06-24",
-      "latestClose": 61.195,
-      "changePercent": -1.3302,
+      "latestClose": 57.59,
+      "changePercent": -7.1429,
       "recentMacdHistogram": [
         -0.195017,
         -0.433654,
-        -0.590543
+        -0.820605
       ],
       "prices": [
         {
@@ -12824,20 +12824,20 @@
         },
         {
           "date": "2026-06-24",
-          "open": 61.63,
-          "high": 62.435,
-          "low": 60.75,
-          "close": 61.195,
-          "volume": 20117,
-          "k": 19.1785,
-          "d": 29.9673,
-          "j": -2.3992,
-          "macd": -3.217278,
-          "macdSignal": -2.626735,
-          "macdHistogram": -0.590543,
-          "volumeRatio5": 4.9866,
-          "volumeRatio20": 18.4289,
-          "changePercent": -1.3302
+          "open": 57.595,
+          "high": 57.865,
+          "low": 57.4,
+          "close": 57.59,
+          "volume": 1703,
+          "k": 18.1917,
+          "d": 29.6384,
+          "j": -4.7018,
+          "macd": -3.504856,
+          "macdSignal": -2.684251,
+          "macdHistogram": -0.820605,
+          "volumeRatio5": 4.8463,
+          "volumeRatio20": 9.9649,
+          "changePercent": -7.1429
         }
       ]
     }
@@ -12891,7 +12891,7 @@
   },
   "lastCloseDate": {
     "00738U": "2026-06-24",
-    "SLV": "2026-06-23",
+    "SLV": "2026-06-24",
     "XAGUSD": "2026-06-24"
   }
 }
