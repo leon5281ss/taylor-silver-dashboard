@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T09:51:28+00:00",
+  "updatedAt": "2026-06-25T23:49:03+00:00",
   "dataStatus": "partial",
   "macroThemeScore": 36,
   "macroThemeLabel": "偏空環境",
@@ -64,7 +64,7 @@
       "maxScore": 10,
       "name": "金銀比",
       "label": "白銀相對黃金轉弱",
-      "value": "金銀比上升，最新約 69.70",
+      "value": "金銀比上升，最新約 69.76",
       "status": "bearish",
       "source": "yfinance GC=F / SI=F"
     },
