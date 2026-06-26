@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-06-25T23:49:03+00:00",
+  "updatedAt": "2026-06-26T09:58:16+00:00",
   "dataStatus": "partial",
-  "macroThemeScore": 36,
+  "macroThemeScore": 43,
   "macroThemeLabel": "偏空環境",
   "macroThemeDescription": "美元、利率或資金面不利，綠燈也應降低部位。",
   "items": {
     "dxy": {
-      "score": 0,
+      "score": 7,
       "maxScore": 15,
       "name": "美元指數 DXY",
-      "label": "美元轉強",
-      "value": "DXY 5日與20日趨勢上升",
-      "status": "bearish",
+      "label": "美元橫盤",
+      "value": "DXY 5日與20日趨勢接近",
+      "status": "neutral",
       "source": "yfinance DX-Y.NYB"
     },
     "realYield": {
@@ -64,7 +64,7 @@
       "maxScore": 10,
       "name": "金銀比",
       "label": "白銀相對黃金轉弱",
-      "value": "金銀比上升，最新約 69.76",
+      "value": "金銀比上升，最新約 69.24",
       "status": "bearish",
       "source": "yfinance GC=F / SI=F"
     },
