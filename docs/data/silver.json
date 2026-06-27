@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T09:11:28+00:00",
+  "updatedAt": "2026-06-27T23:32:56+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -8541,15 +8541,15 @@
           "high": 53.2,
           "low": 51.5,
           "close": 52.36,
-          "volume": 24749000,
+          "volume": 24606600,
           "k": 17.2345,
           "d": 23.5938,
           "j": 4.5159,
           "macd": -3.630609,
           "macdSignal": -2.738167,
           "macdHistogram": -0.892443,
-          "volumeRatio5": 0.8663,
-          "volumeRatio20": 1.0385,
+          "volumeRatio5": 0.8622,
+          "volumeRatio20": 1.0329,
           "changePercent": 1.1201
         },
         {
@@ -8565,8 +8565,8 @@
           "macd": -3.769471,
           "macdSignal": -2.944427,
           "macdHistogram": -0.825043,
-          "volumeRatio5": 0.5956,
-          "volumeRatio20": 0.6512,
+          "volumeRatio5": 0.5963,
+          "volumeRatio20": 0.6514,
           "changePercent": 1.7571
         }
       ]
