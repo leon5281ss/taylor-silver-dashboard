@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-27T23:32:56+00:00",
+  "updatedAt": "2026-06-28T09:40:50+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -9075,7 +9075,7 @@
           "k": 67.6117,
           "d": 49.832,
           "j": 103.1711,
-          "macd": 0.272173,
+          "macd": 0.272172,
           "macdSignal": 0.358077,
           "macdHistogram": -0.085904,
           "volumeRatio5": 0.3965,
