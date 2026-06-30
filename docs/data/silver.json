@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-29T23:31:00+00:00",
+  "updatedAt": "2026-06-30T10:06:53+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -40,32 +40,15 @@
       "sourceLabel": "FinMind TaiwanStockPrice 00738U",
       "source": "FinMind TaiwanStockPrice 00738U",
       "dataDelay": true,
-      "lastCloseDate": "2026-06-29",
-      "latestClose": 46.82,
-      "changePercent": 2.8559,
+      "lastCloseDate": "2026-06-30",
+      "latestClose": 46.2,
+      "changePercent": -1.3242,
       "recentMacdHistogram": [
-        -0.712899,
         -0.863081,
-        -0.806252
+        -0.806252,
+        -0.743344
       ],
       "prices": [
-        {
-          "date": "2025-06-19",
-          "open": 31.09,
-          "high": 31.1,
-          "low": 30.95,
-          "close": 31.09,
-          "volume": 2181199,
-          "k": 76.5807,
-          "d": 83.751,
-          "j": 62.2401,
-          "macd": 0.774168,
-          "macdSignal": 0.645429,
-          "macdHistogram": 0.128739,
-          "volumeRatio5": 1.0646,
-          "volumeRatio20": 1.0097,
-          "changePercent": -1.458
-        },
         {
           "date": "2025-06-20",
           "open": 30.75,
@@ -4298,6 +4281,23 @@
           "volumeRatio5": 0.6288,
           "volumeRatio20": 0.81,
           "changePercent": 2.8559
+        },
+        {
+          "date": "2026-06-30",
+          "open": 46.17,
+          "high": 46.61,
+          "low": 45.59,
+          "close": 46.2,
+          "volume": 5315172,
+          "k": 13.6816,
+          "d": 19.3208,
+          "j": 2.4032,
+          "macd": -3.626443,
+          "macdSignal": -2.8831,
+          "macdHistogram": -0.743344,
+          "volumeRatio5": 0.7034,
+          "volumeRatio20": 0.8315,
+          "changePercent": -1.3242
         }
       ]
     },
@@ -8541,32 +8541,32 @@
           "high": 53.87,
           "low": 52.46,
           "close": 53.28,
-          "volume": 15404300,
+          "volume": 15469200,
           "k": 18.3742,
           "d": 21.854,
           "j": 11.4148,
           "macd": -3.769471,
           "macdSignal": -2.944427,
           "macdHistogram": -0.825043,
-          "volumeRatio5": 0.5963,
-          "volumeRatio20": 0.6514,
+          "volumeRatio5": 0.5985,
+          "volumeRatio20": 0.6541,
           "changePercent": 1.7571
         },
         {
           "date": "2026-06-29",
-          "open": 52.775,
+          "open": 52.78,
           "high": 52.93,
           "low": 51.93,
           "close": 52.68,
-          "volume": 13559587,
+          "volume": 14157300,
           "k": 17.7432,
           "d": 20.4837,
           "j": 12.2623,
           "macd": -3.883171,
           "macdSignal": -3.132176,
           "macdHistogram": -0.750995,
-          "volumeRatio5": 0.537,
-          "volumeRatio20": 0.5771,
+          "volumeRatio5": 0.5577,
+          "volumeRatio20": 0.6017,
           "changePercent": -1.1261
         }
       ]
@@ -8580,32 +8580,15 @@
       "sourceLabel": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
-      "lastCloseDate": "2026-06-29",
-      "latestClose": 58.98,
-      "changePercent": -0.4002,
+      "lastCloseDate": "2026-06-30",
+      "latestClose": 59.19,
+      "changePercent": 1.7447,
       "recentMacdHistogram": [
-        -0.930409,
         -0.886955,
-        -0.799801
+        -0.851175,
+        -0.688867
       ],
       "prices": [
-        {
-          "date": "2025-07-02",
-          "open": 35.98,
-          "high": 36.45,
-          "low": 35.98,
-          "close": 36.426,
-          "volume": 512,
-          "k": 52.8302,
-          "d": 43.7994,
-          "j": 70.8916,
-          "macd": 0.576656,
-          "macdSignal": 0.707233,
-          "macdHistogram": -0.130578,
-          "volumeRatio5": 0.0496,
-          "volumeRatio20": 0.1945,
-          "changePercent": 0.9534
-        },
         {
           "date": "2025-07-03",
           "open": 36.41,
@@ -12811,33 +12794,50 @@
           "high": 59.217,
           "low": 59.19,
           "close": 59.217,
-          "volume": 148,
+          "volume": 25322,
           "k": 15.3116,
           "d": 22.0049,
           "j": 1.925,
           "macd": -4.018176,
           "macdSignal": -3.131221,
           "macdHistogram": -0.886955,
-          "volumeRatio5": 1.6555,
-          "volumeRatio20": 2.999,
+          "volumeRatio5": 4.9416,
+          "volumeRatio20": 19.3586,
           "changePercent": 1.4893
         },
         {
           "date": "2026-06-29",
+          "open": 58.68,
+          "high": 59.125,
+          "low": 57.54,
+          "close": 58.175,
+          "volume": 25322,
+          "k": 12.4583,
+          "d": 18.8227,
+          "j": -0.2704,
+          "macd": -4.195189,
+          "macdSignal": -3.344014,
+          "macdHistogram": -0.851175,
+          "volumeRatio5": 2.4861,
+          "volumeRatio20": 9.8414,
+          "changePercent": -1.7596
+        },
+        {
+          "date": "2026-06-30",
           "open": 58.77,
-          "high": 59.02,
-          "low": 58.68,
-          "close": 58.98,
-          "volume": 411,
-          "k": 14.417,
-          "d": 19.4756,
-          "j": 4.2998,
-          "macd": -4.130973,
-          "macdSignal": -3.331171,
-          "macdHistogram": -0.799801,
-          "volumeRatio5": 2.4406,
-          "volumeRatio20": 5.9782,
-          "changePercent": -0.4002
+          "high": 60.085,
+          "low": 57.065,
+          "close": 59.19,
+          "volume": 16922,
+          "k": 13.407,
+          "d": 17.0175,
+          "j": 6.186,
+          "macd": -4.205098,
+          "macdSignal": -3.516231,
+          "macdHistogram": -0.688867,
+          "volumeRatio5": 1.2481,
+          "volumeRatio20": 4.9552,
+          "changePercent": 1.7447
         }
       ]
     }
@@ -12890,8 +12890,8 @@
     "XAGUSD": true
   },
   "lastCloseDate": {
-    "00738U": "2026-06-29",
+    "00738U": "2026-06-30",
     "SLV": "2026-06-29",
-    "XAGUSD": "2026-06-29"
+    "XAGUSD": "2026-06-30"
   }
 }
