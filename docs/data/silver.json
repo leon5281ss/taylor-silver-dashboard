@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-04T09:04:50+00:00",
+  "updatedAt": "2026-07-04T23:27:48+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -8558,15 +8558,15 @@
           "high": 56.13,
           "low": 54.57,
           "close": 55.02,
-          "volume": 16965300,
+          "volume": 16907700,
           "k": 30.9036,
           "d": 24.2864,
           "j": 44.1381,
           "macd": -3.587206,
           "macdSignal": -3.423498,
           "macdHistogram": -0.163707,
-          "volumeRatio5": 1.0788,
-          "volumeRatio20": 0.7103,
+          "volumeRatio5": 1.076,
+          "volumeRatio20": 0.7079,
           "changePercent": 2.6876
         }
       ]
@@ -12811,15 +12811,15 @@
           "high": 61.595,
           "low": 59.465,
           "close": 60.643,
-          "volume": 367,
+          "volume": 197,
           "k": 27.8048,
           "d": 21.4899,
           "j": 40.4345,
           "macd": -3.901593,
           "macdSignal": -3.679915,
           "macdHistogram": -0.221679,
-          "volumeRatio5": 0.0581,
-          "volumeRatio20": 0.2278,
+          "volumeRatio5": 0.0314,
+          "volumeRatio20": 0.1229,
           "changePercent": 0.9287
         },
         {
@@ -12835,8 +12835,8 @@
           "macd": -3.547327,
           "macdSignal": -3.653397,
           "macdHistogram": 0.10607,
-          "volumeRatio5": 3.4399,
-          "volumeRatio20": 6.0005,
+          "volumeRatio5": 3.4694,
+          "volumeRatio20": 6.0229,
           "changePercent": 3.5816
         }
       ]
