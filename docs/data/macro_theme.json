@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-07-11T23:14:45+00:00",
+  "updatedAt": "2026-07-12T08:38:00+00:00",
   "dataStatus": "partial",
-  "macroThemeScore": 43,
-  "macroThemeLabel": "偏空環境",
-  "macroThemeDescription": "美元、利率或資金面不利，綠燈也應降低部位。",
+  "macroThemeScore": 48,
+  "macroThemeLabel": "中性觀望",
+  "macroThemeDescription": "多空條件混雜，不適合追高。",
   "items": {
     "dxy": {
       "score": 7,
@@ -60,12 +60,12 @@
       "source": "manual fallback"
     },
     "goldSilverRatio": {
-      "score": 0,
+      "score": 5,
       "maxScore": 10,
       "name": "金銀比",
-      "label": "白銀相對黃金轉弱",
-      "value": "金銀比上升，最新約 68.62",
-      "status": "bearish",
+      "label": "金銀比橫盤",
+      "value": "金銀比橫盤，最新約 68.37",
+      "status": "neutral",
       "source": "yfinance GC=F / SI=F"
     },
     "themeHeat": {
@@ -81,5 +81,5 @@
   "sourceStatus": {
     "manualFallback": "realYield、fedExpectation、etfFlow、openInterest、cftcPosition、themeHeat 第一版暫以中性或需人工確認處理"
   },
-  "summary": "偏空環境：美元、利率或資金面不利，綠燈也應降低部位。 宏觀與題材分數只作為信心加權與部位大小參考，仍需搭配 KD / MACD 技術燈號確認。"
+  "summary": "中性觀望：多空條件混雜，不適合追高。 宏觀與題材分數只作為信心加權與部位大小參考，仍需搭配 KD / MACD 技術燈號確認。"
 }
