@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-25T08:29:41+00:00",
+  "updatedAt": "2026-07-25T23:27:07+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -4310,15 +4310,32 @@
       "sourceLabel": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "source": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "dataDelay": true,
-      "lastCloseDate": "2026-07-24",
-      "latestClose": 52.59,
-      "changePercent": 1.0181,
+      "lastCloseDate": "2026-07-23",
+      "latestClose": 52.06,
+      "changePercent": -3.4495,
       "recentMacdHistogram": [
+        0.291042,
         0.457007,
-        0.44289,
-        0.468156
+        0.44289
       ],
       "prices": [
+        {
+          "date": "2025-07-25",
+          "open": 35.28,
+          "high": 35.39,
+          "low": 34.48,
+          "close": 34.66,
+          "volume": 24958300,
+          "k": 66.5854,
+          "d": 76.671,
+          "j": 46.4142,
+          "macd": 0.762779,
+          "macdSignal": 0.742201,
+          "macdHistogram": 0.020578,
+          "volumeRatio5": 1.1134,
+          "volumeRatio20": 1.0812,
+          "changePercent": -2.3387
+        },
         {
           "date": "2025-07-28",
           "open": 34.65,
@@ -8551,23 +8568,6 @@
           "volumeRatio5": 0.9974,
           "volumeRatio20": 0.8845,
           "changePercent": -3.4495
-        },
-        {
-          "date": "2026-07-24",
-          "open": 52.34,
-          "high": 53.33,
-          "low": 52.3,
-          "close": 52.59,
-          "volume": 11104200,
-          "k": 50.856,
-          "d": 44.2561,
-          "j": 64.0559,
-          "macd": -1.993327,
-          "macdSignal": -2.461483,
-          "macdHistogram": 0.468156,
-          "volumeRatio5": 0.8617,
-          "volumeRatio20": 0.7482,
-          "changePercent": 1.0181
         }
       ]
     },
@@ -12891,7 +12891,7 @@
   },
   "lastCloseDate": {
     "00738U": "2026-07-24",
-    "SLV": "2026-07-24",
+    "SLV": "2026-07-23",
     "XAGUSD": "2026-07-24"
   }
 }
