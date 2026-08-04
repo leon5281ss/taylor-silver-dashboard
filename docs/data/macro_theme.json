@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-03T23:32:22+00:00",
+  "updatedAt": "2026-08-04T09:19:20+00:00",
   "dataStatus": "partial",
-  "macroThemeScore": 51,
+  "macroThemeScore": 56,
   "macroThemeLabel": "中性觀望",
   "macroThemeDescription": "多空條件混雜，不適合追高。",
   "items": {
@@ -60,12 +60,12 @@
       "source": "manual fallback"
     },
     "goldSilverRatio": {
-      "score": 0,
+      "score": 5,
       "maxScore": 10,
       "name": "金銀比",
-      "label": "白銀相對黃金轉弱",
-      "value": "金銀比上升，最新約 70.43",
-      "status": "bearish",
+      "label": "金銀比橫盤",
+      "value": "金銀比橫盤，最新約 69.75",
+      "status": "neutral",
       "source": "yfinance GC=F / SI=F"
     },
     "themeHeat": {
