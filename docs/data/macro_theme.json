@@ -1,17 +1,17 @@
 {
-  "updatedAt": "2026-08-07T07:51:45+00:00",
+  "updatedAt": "2026-08-07T23:01:03+00:00",
   "dataStatus": "partial",
-  "macroThemeScore": 53,
+  "macroThemeScore": 56,
   "macroThemeLabel": "中性觀望",
   "macroThemeDescription": "多空條件混雜，不適合追高。",
   "items": {
     "dxy": {
-      "score": 7,
+      "score": 15,
       "maxScore": 15,
       "name": "美元指數 DXY",
-      "label": "美元橫盤",
-      "value": "DXY 5日與20日趨勢接近",
-      "status": "neutral",
+      "label": "美元轉弱",
+      "value": "DXY 5日與20日趨勢下降",
+      "status": "bullish",
       "source": "yfinance DX-Y.NYB"
     },
     "realYield": {
@@ -60,12 +60,12 @@
       "source": "manual fallback"
     },
     "goldSilverRatio": {
-      "score": 10,
+      "score": 5,
       "maxScore": 10,
       "name": "金銀比",
-      "label": "白銀相對黃金轉強",
-      "value": "金銀比下降，最新約 67.85",
-      "status": "bullish",
+      "label": "金銀比橫盤",
+      "value": "金銀比橫盤，最新約 68.99",
+      "status": "neutral",
       "source": "yfinance GC=F / SI=F"
     },
     "themeHeat": {
