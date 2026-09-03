@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-02T11:34:37+00:00",
+  "updatedAt": "2026-09-03T00:22:59+00:00",
   "dataStatus": "partial",
   "macroThemeScore": 48,
   "macroThemeLabel": "中性觀望",
@@ -64,7 +64,7 @@
       "maxScore": 10,
       "name": "金銀比",
       "label": "金銀比橫盤",
-      "value": "金銀比橫盤，最新約 67.56",
+      "value": "金銀比橫盤，最新約 67.33",
       "status": "neutral",
       "source": "yfinance GC=F / SI=F"
     },
