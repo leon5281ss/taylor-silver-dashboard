@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T00:32:17+00:00",
+  "updatedAt": "2026-09-08T11:33:51+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -40,32 +40,15 @@
       "sourceLabel": "FinMind TaiwanStockPrice 00738U",
       "source": "FinMind TaiwanStockPrice 00738U",
       "dataDelay": true,
-      "lastCloseDate": "2026-09-07",
-      "latestClose": 52.4,
-      "changePercent": -1.0387,
+      "lastCloseDate": "2026-09-08",
+      "latestClose": 52.8,
+      "changePercent": 0.7634,
       "recentMacdHistogram": [
-        -0.288967,
         -0.271453,
-        -0.291129
+        -0.291129,
+        -0.271794
       ],
       "prices": [
-        {
-          "date": "2025-08-27",
-          "open": 32.53,
-          "high": 32.53,
-          "low": 32.35,
-          "close": 32.37,
-          "volume": 774665,
-          "k": 74.0526,
-          "d": 63.4666,
-          "j": 95.2246,
-          "macd": 0.184882,
-          "macdSignal": 0.149735,
-          "macdHistogram": 0.035147,
-          "volumeRatio5": 0.5246,
-          "volumeRatio20": 0.4547,
-          "changePercent": -0.6141
-        },
         {
           "date": "2025-08-28",
           "open": 32.56,
@@ -4298,6 +4281,23 @@
           "volumeRatio5": 0.6547,
           "volumeRatio20": 0.4849,
           "changePercent": -1.0387
+        },
+        {
+          "date": "2026-09-08",
+          "open": 52.9,
+          "high": 53.2,
+          "low": 52.65,
+          "close": 52.8,
+          "volume": 1758106,
+          "k": 44.0703,
+          "d": 46.1395,
+          "j": 39.9321,
+          "macd": 0.660722,
+          "macdSignal": 0.932516,
+          "macdHistogram": -0.271794,
+          "volumeRatio5": 0.5953,
+          "volumeRatio20": 0.4465,
+          "changePercent": 0.7634
         }
       ]
     },
@@ -8580,13 +8580,13 @@
       "sourceLabel": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
-      "lastCloseDate": "2026-09-07",
-      "latestClose": 67.25,
-      "changePercent": 1.8214,
+      "lastCloseDate": "2026-09-08",
+      "latestClose": 66.7,
+      "changePercent": 0.9887,
       "recentMacdHistogram": [
         -0.312326,
         -0.337746,
-        -0.27205
+        -0.307149
       ],
       "prices": [
         {
@@ -12811,33 +12811,33 @@
           "high": 66.54,
           "low": 65.465,
           "close": 66.047,
-          "volume": 57,
+          "volume": 94,
           "k": 37.3787,
           "d": 44.9044,
           "j": 22.3273,
           "macd": 1.071569,
           "macdSignal": 1.409315,
           "macdHistogram": -0.337746,
-          "volumeRatio5": 0.1632,
-          "volumeRatio20": 0.0383,
+          "volumeRatio5": 0.2636,
+          "volumeRatio20": 0.0631,
           "changePercent": -1.3827
         },
         {
-          "date": "2026-09-07",
+          "date": "2026-09-08",
           "open": 66.735,
-          "high": 67.375,
+          "high": 67.835,
           "low": 66.025,
-          "close": 67.25,
-          "volume": 14186,
-          "k": 41.543,
-          "d": 43.7839,
-          "j": 37.0613,
-          "macd": 1.069253,
-          "macdSignal": 1.341303,
-          "macdHistogram": -0.27205,
-          "volumeRatio5": 4.5735,
-          "volumeRatio20": 6.4583,
-          "changePercent": 1.8214
+          "close": 66.7,
+          "volume": 26647,
+          "k": 39.1926,
+          "d": 43.0004,
+          "j": 31.5769,
+          "macd": 1.025379,
+          "macdSignal": 1.332528,
+          "macdHistogram": -0.307149,
+          "volumeRatio5": 4.7572,
+          "volumeRatio20": 9.4444,
+          "changePercent": 0.9887
         }
       ]
     }
@@ -12890,8 +12890,8 @@
     "XAGUSD": true
   },
   "lastCloseDate": {
-    "00738U": "2026-09-07",
+    "00738U": "2026-09-08",
     "SLV": "2026-09-04",
-    "XAGUSD": "2026-09-07"
+    "XAGUSD": "2026-09-08"
   }
 }
