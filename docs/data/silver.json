@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T11:33:51+00:00",
+  "updatedAt": "2026-09-09T00:22:30+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -8581,12 +8581,12 @@
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
       "lastCloseDate": "2026-09-08",
-      "latestClose": 66.7,
-      "changePercent": 0.9887,
+      "latestClose": 66.475,
+      "changePercent": 0.648,
       "recentMacdHistogram": [
         -0.312326,
         -0.337746,
-        -0.307149
+        -0.321508
       ],
       "prices": [
         {
@@ -12824,20 +12824,20 @@
         },
         {
           "date": "2026-09-08",
-          "open": 66.735,
-          "high": 67.835,
-          "low": 66.025,
-          "close": 66.7,
-          "volume": 26647,
-          "k": 39.1926,
-          "d": 43.0004,
-          "j": 31.5769,
-          "macd": 1.025379,
-          "macdSignal": 1.332528,
-          "macdHistogram": -0.307149,
-          "volumeRatio5": 4.7572,
-          "volumeRatio20": 9.4444,
-          "changePercent": 0.9887
+          "open": 66.44,
+          "high": 66.485,
+          "low": 66.13,
+          "close": 66.475,
+          "volume": 993,
+          "k": 38.2311,
+          "d": 42.6799,
+          "j": 29.3334,
+          "macd": 1.00743,
+          "macdSignal": 1.328938,
+          "macdHistogram": -0.321508,
+          "volumeRatio5": 2.1101,
+          "volumeRatio20": 0.6453,
+          "changePercent": 0.648
         }
       ]
     }
