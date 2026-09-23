@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T11:56:01+00:00",
+  "updatedAt": "2026-09-23T00:45:09+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -8558,15 +8558,15 @@
           "high": 60.15,
           "low": 59.36,
           "close": 59.63,
-          "volume": 10657000,
+          "volume": 10799200,
           "k": 47.4453,
           "d": 34.5669,
           "j": 73.202,
           "macd": 0.149702,
           "macdSignal": 0.297704,
           "macdHistogram": -0.148002,
-          "volumeRatio5": 0.7285,
-          "volumeRatio20": 0.6577,
+          "volumeRatio5": 0.7368,
+          "volumeRatio20": 0.6662,
           "changePercent": -0.5006
         }
       ]
@@ -8581,12 +8581,12 @@
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
       "lastCloseDate": "2026-09-22",
-      "latestClose": 66.04,
-      "changePercent": 0.3266,
+      "latestClose": 67.895,
+      "changePercent": 3.1447,
       "recentMacdHistogram": [
         -0.255892,
         -0.186278,
-        -0.122906
+        -0.004525
       ],
       "prices": [
         {
@@ -12824,20 +12824,20 @@
         },
         {
           "date": "2026-09-22",
-          "open": 66.685,
-          "high": 67.325,
-          "low": 65.04,
-          "close": 66.04,
-          "volume": 20923,
-          "k": 54.6945,
-          "d": 42.958,
-          "j": 78.1675,
-          "macd": 0.257442,
-          "macdSignal": 0.380349,
-          "macdHistogram": -0.122906,
-          "volumeRatio5": 4.9145,
-          "volumeRatio20": 7.9978,
-          "changePercent": 0.3266
+          "open": 67.61,
+          "high": 68.055,
+          "low": 67.61,
+          "close": 67.895,
+          "volume": 1302,
+          "k": 63.5849,
+          "d": 45.9214,
+          "j": 98.9117,
+          "macd": 0.405419,
+          "macdSignal": 0.409944,
+          "macdHistogram": -0.004525,
+          "volumeRatio5": 3.9076,
+          "volumeRatio20": 0.7963,
+          "changePercent": 3.1447
         }
       ]
     }
