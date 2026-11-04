@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-04T02:29:07+00:00",
+  "updatedAt": "2026-11-04T14:46:06+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -40,32 +40,15 @@
       "sourceLabel": "FinMind TaiwanStockPrice 00738U",
       "source": "FinMind TaiwanStockPrice 00738U",
       "dataDelay": true,
-      "lastCloseDate": "2026-11-03",
-      "latestClose": 39.02,
-      "changePercent": -1.7623,
+      "lastCloseDate": "2026-11-04",
+      "latestClose": 39.55,
+      "changePercent": 1.3583,
       "recentMacdHistogram": [
-        -0.442261,
         -0.50509,
-        -0.545491
+        -0.545491,
+        -0.489978
       ],
       "prices": [
-        {
-          "date": "2025-10-21",
-          "open": 42.74,
-          "high": 42.76,
-          "low": 41.99,
-          "close": 42.1,
-          "volume": 9699199,
-          "k": 69.959,
-          "d": 81.8843,
-          "j": 46.1083,
-          "macd": 2.122417,
-          "macdSignal": 1.998451,
-          "macdHistogram": 0.123966,
-          "volumeRatio5": 0.7553,
-          "volumeRatio20": 1.2903,
-          "changePercent": -0.2842
-        },
         {
           "date": "2025-10-22",
           "open": 39.76,
@@ -4298,6 +4281,23 @@
           "volumeRatio5": 1.0763,
           "volumeRatio20": 1.007,
           "changePercent": -1.7623
+        },
+        {
+          "date": "2026-11-04",
+          "open": 39.22,
+          "high": 39.66,
+          "low": 38.77,
+          "close": 39.55,
+          "volume": 2443202,
+          "k": 7.4649,
+          "d": 8.6698,
+          "j": 5.0552,
+          "macd": -2.632607,
+          "macdSignal": -2.142629,
+          "macdHistogram": -0.489978,
+          "volumeRatio5": 0.751,
+          "volumeRatio20": 0.7242,
+          "changePercent": 1.3583
         }
       ]
     },
@@ -4310,32 +4310,15 @@
       "sourceLabel": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "source": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
       "dataDelay": true,
-      "lastCloseDate": "2026-11-03",
-      "latestClose": 44.84,
-      "changePercent": -1.6019,
+      "lastCloseDate": "2026-11-04",
+      "latestClose": 47.145,
+      "changePercent": 5.1405,
       "recentMacdHistogram": [
-        -0.454217,
         -0.456755,
-        -0.461736
+        -0.461736,
+        -0.273246
       ],
       "prices": [
-        {
-          "date": "2025-11-05",
-          "open": 43.49,
-          "high": 43.79,
-          "low": 43.35,
-          "close": 43.65,
-          "volume": 16178500,
-          "k": 51.5751,
-          "d": 43.0119,
-          "j": 68.7016,
-          "macd": 0.307839,
-          "macdSignal": 0.747113,
-          "macdHistogram": -0.439274,
-          "volumeRatio5": 0.7194,
-          "volumeRatio20": 0.3635,
-          "changePercent": 2.1292
-        },
         {
           "date": "2025-11-06",
           "open": 43.66,
@@ -8568,6 +8551,23 @@
           "volumeRatio5": 0.7549,
           "volumeRatio20": 0.9849,
           "changePercent": -1.6019
+        },
+        {
+          "date": "2026-11-04",
+          "open": 46.776,
+          "high": 47.2,
+          "low": 46.776,
+          "close": 47.145,
+          "volume": 6436258,
+          "k": 28.8021,
+          "d": 20.1891,
+          "j": 46.0281,
+          "macd": -2.568891,
+          "macdSignal": -2.295645,
+          "macdHistogram": -0.273246,
+          "volumeRatio5": 0.2915,
+          "volumeRatio20": 0.355,
+          "changePercent": 5.1405
         }
       ]
     },
@@ -8580,32 +8580,15 @@
       "sourceLabel": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
-      "lastCloseDate": "2026-11-03",
-      "latestClose": 49.5,
-      "changePercent": -2.4054,
+      "lastCloseDate": "2026-11-04",
+      "latestClose": 52.185,
+      "changePercent": 5.2393,
       "recentMacdHistogram": [
-        -0.520607,
         -0.486184,
-        -0.495391
+        -0.489838,
+        -0.277949
       ],
       "prices": [
-        {
-          "date": "2025-11-05",
-          "open": 47.56,
-          "high": 47.88,
-          "low": 47.56,
-          "close": 47.863,
-          "volume": 23,
-          "k": 53.0807,
-          "d": 43.0345,
-          "j": 73.1732,
-          "macd": 0.491775,
-          "macdSignal": 0.87273,
-          "macdHistogram": -0.380955,
-          "volumeRatio5": 0.1159,
-          "volumeRatio20": 0.0618,
-          "changePercent": 1.5553
-        },
         {
           "date": "2025-11-06",
           "open": 47.794,
@@ -12824,20 +12807,37 @@
         },
         {
           "date": "2026-11-03",
+          "open": 48.58,
+          "high": 49.995,
+          "low": 48.55,
+          "close": 49.587,
+          "volume": 212,
+          "k": 11.7731,
+          "d": 11.3016,
+          "j": 12.7162,
+          "macd": -2.980205,
+          "macdSignal": -2.490367,
+          "macdHistogram": -0.489838,
+          "volumeRatio5": 1.1158,
+          "volumeRatio20": 1.9458,
+          "changePercent": -2.2338
+        },
+        {
+          "date": "2026-11-04",
           "open": 49.825,
-          "high": 50.27,
-          "low": 49.37,
-          "close": 49.5,
-          "volume": 5896,
-          "k": 10.2086,
-          "d": 10.7801,
-          "j": 9.0656,
-          "macd": -2.987146,
-          "macdSignal": -2.491755,
-          "macdHistogram": -0.495391,
-          "volumeRatio5": 4.4438,
-          "volumeRatio20": 14.9968,
-          "changePercent": -2.4054
+          "high": 52.31,
+          "low": 48.98,
+          "close": 52.185,
+          "volume": 40528,
+          "k": 28.9469,
+          "d": 17.1834,
+          "j": 52.474,
+          "macd": -2.837803,
+          "macdSignal": -2.559854,
+          "macdHistogram": -0.277949,
+          "volumeRatio5": 4.9248,
+          "volumeRatio20": 19.1799,
+          "changePercent": 5.2393
         }
       ]
     }
@@ -12890,8 +12890,8 @@
     "XAGUSD": true
   },
   "lastCloseDate": {
-    "00738U": "2026-11-03",
-    "SLV": "2026-11-03",
-    "XAGUSD": "2026-11-03"
+    "00738U": "2026-11-04",
+    "SLV": "2026-11-04",
+    "XAGUSD": "2026-11-04"
   }
 }
