@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-13T02:43:12+00:00",
+  "updatedAt": "2026-11-13T14:46:52+00:00",
   "dataStatus": "partial",
-  "macroThemeScore": 41,
+  "macroThemeScore": 36,
   "macroThemeLabel": "偏空環境",
   "macroThemeDescription": "美元、利率或資金面不利，綠燈也應降低部位。",
   "items": {
@@ -60,12 +60,12 @@
       "source": "manual fallback"
     },
     "goldSilverRatio": {
-      "score": 5,
+      "score": 0,
       "maxScore": 10,
       "name": "金銀比",
-      "label": "金銀比橫盤",
-      "value": "金銀比橫盤，最新約 77.46",
-      "status": "neutral",
+      "label": "白銀相對黃金轉弱",
+      "value": "金銀比上升，最新約 78.44",
+      "status": "bearish",
       "source": "yfinance GC=F / SI=F"
     },
     "themeHeat": {
