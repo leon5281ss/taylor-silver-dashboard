@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T03:18:13+00:00",
+  "updatedAt": "2026-11-21T14:54:08+00:00",
   "dataStatus": "live",
   "keywords": {
     "english": [
@@ -4307,8 +4307,8 @@
       "typeLabel": "美股白銀 ETF",
       "currency": "USD",
       "sourceStatus": "success",
-      "sourceLabel": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
-      "source": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
+      "sourceLabel": "yfinance SLV; Stooq failed: HTTPSConnectionPool(host='stooq.com', port=443): Max retries exceeded with url: /q/d/l/?s=slv.us&i=d (Caused by ConnectTimeoutError(<HTTPSConnection(host='stooq.com', port=443) at 0x73167f4ea490>, 'Connection to stooq.com timed out. (connect timeout=30)'))",
+      "source": "yfinance SLV; Stooq failed: HTTPSConnectionPool(host='stooq.com', port=443): Max retries exceeded with url: /q/d/l/?s=slv.us&i=d (Caused by ConnectTimeoutError(<HTTPSConnection(host='stooq.com', port=443) at 0x73167f4ea490>, 'Connection to stooq.com timed out. (connect timeout=30)'))",
       "dataDelay": true,
       "lastCloseDate": "2026-11-20",
       "latestClose": 36.97,
@@ -8581,12 +8581,12 @@
       "source": "yfinance SI=F；使用白銀期貨 SI=F 作為參考",
       "dataDelay": true,
       "lastCloseDate": "2026-11-20",
-      "latestClose": 41.08,
-      "changePercent": -7.3063,
+      "latestClose": 41.035,
+      "changePercent": -7.4078,
       "recentMacdHistogram": [
         -0.309002,
         -0.406437,
-        -0.628787
+        -0.631659
       ],
       "prices": [
         {
@@ -12824,20 +12824,20 @@
         },
         {
           "date": "2026-11-20",
-          "open": 42.86,
-          "high": 43.18,
-          "low": 40.615,
-          "close": 41.08,
-          "volume": 110375,
-          "k": 8.5747,
-          "d": 17.7632,
-          "j": -9.8023,
-          "macd": -3.424689,
-          "macdSignal": -2.795903,
-          "macdHistogram": -0.628787,
-          "volumeRatio5": 4.9883,
-          "volumeRatio20": 19.7012,
-          "changePercent": -7.3063
+          "open": 42.225,
+          "high": 42.435,
+          "low": 40.93,
+          "close": 41.035,
+          "volume": 30,
+          "k": 7.5586,
+          "d": 17.4245,
+          "j": -12.1731,
+          "macd": -3.428279,
+          "macdSignal": -2.79662,
+          "macdHistogram": -0.631659,
+          "volumeRatio5": 0.519,
+          "volumeRatio20": 0.3521,
+          "changePercent": -7.4078
         }
       ]
     }
@@ -12881,7 +12881,7 @@
   },
   "sourceLabel": {
     "00738U": "FinMind TaiwanStockPrice 00738U",
-    "SLV": "yfinance SLV; Stooq failed: Stooq returned no rows for slv.us",
+    "SLV": "yfinance SLV; Stooq failed: HTTPSConnectionPool(host='stooq.com', port=443): Max retries exceeded with url: /q/d/l/?s=slv.us&i=d (Caused by ConnectTimeoutError(<HTTPSConnection(host='stooq.com', port=443) at 0x73167f4ea490>, 'Connection to stooq.com timed out. (connect timeout=30)'))",
     "XAGUSD": "yfinance SI=F；使用白銀期貨 SI=F 作為參考"
   },
   "dataDelay": {
